@@ -1,6 +1,6 @@
 {
     "name": "case-server",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Server application for handling cases",
     "type": "module",
     "main": "./src/index.js",
