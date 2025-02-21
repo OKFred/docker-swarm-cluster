@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_FILE_NAME=file:local.db
+    deploy:
+      placement:
+        constraints:
+          - node.labels.role == server
+  case:
+    build:
+      context: ./case
+      dockerfile: Dockerfile
+    depends_on:
+      - server
+    environment:
+      - SERVER_URL=http://localhost:3000
+    deploy:
+      replicas: 2  # 或者任意你想要的数量
+      placement:
+        constraints:
+          - node.labels.role == case
+
+volumes:
+  server_data:
