@@ -117,7 +117,7 @@ app.delete("/api/case/delete/:id", async (c) => {
 
 // 返回 OpenAPI 文档 doc.json
 app.get("/doc.json", async (c) => {
-    const docPath = path.join(process.cwd(), "doc.json");
+    const docPath = path.join(process.cwd(), "src", "doc", "index.json");
     try {
         const docContent = fs.readFileSync(docPath, "utf-8");
         return c.body(docContent, 200, { "Content-Type": "application/json" });
@@ -128,7 +128,7 @@ app.get("/doc.json", async (c) => {
 
 // 返回 Swagger UI 页面
 app.get("/doc", async (c) => {
-    const docHtmlPath = path.join(process.cwd(), "doc", "index.html");
+    const docHtmlPath = path.join(process.cwd(), "src", "doc", "index.html");
     try {
         const htmlContent = fs.readFileSync(docHtmlPath, "utf-8");
         return c.body(htmlContent, 200, { "Content-Type": "text/html" });
