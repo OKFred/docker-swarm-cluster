@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 import { addCase, getCase, updateCase } from "./api/index.js";
 dotenv.config();
-// 没有环境变量就随机生成
-const CASE_NAME = process.env.CASE_NAME || `case-${Math.floor(Math.random() * 10000)}`;
-const CASE_TOKEN = process.env.CASE_TOKEN || `token-${Math.floor(Math.random() * 10000)}`;
 async function runCase() {
+    // 没有环境变量就随机生成
+    const CASE_NAME = process.env.CASE_NAME || `case-${Math.floor(Math.random() * 10000)}`;
+    const CASE_TOKEN = process.env.CASE_TOKEN || `token-${Math.floor(Math.random() * 10000)}`;
     try {
         // 构造新增 case 的数据，这里 caseTimeout 和 returnTime 为随机值
         const newCase = {
@@ -39,5 +39,14 @@ async function runCase() {
             return;
         console.error("Error running case:", err.message);
     }
+    updateTimeout();
 }
-runCase();
+let demoTimeout = 0;
+function runLoop() {
+    runCase().finally(() => setTimeout(runLoop, demoTimeout));
+}
+function updateTimeout() {
+    demoTimeout = Math.floor(Math.random() * 20000);
+    console.log("Running case in ", Number(demoTimeout / 1000).toFixed(2), "s");
+}
+runLoop();
