@@ -1,0 +1,261 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Case Server API",
+        "version": "1.0.0",
+        "description": "API documentation for the Case Server"
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Health check",
+                "responses": {
+                    "200": {
+                        "description": "Server status",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ok": { "type": "boolean" },
+                                        "message": { "type": "string" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/case/add": {
+            "post": {
+                "summary": "Add a new case",
+                "requestBody": {
+                    "description": "New case details",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewCase"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Case added successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AddCaseResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/case/list": {
+            "post": {
+                "summary": "List cases",
+                "requestBody": {
+                    "description": "Query parameters",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListCaseQuery"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "List of cases",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListCaseResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/case/run/{id}": {
+            "get": {
+                "summary": "Get case details (for running case)",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Case details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Case"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/case/update/{id}": {
+            "post": {
+                "summary": "Update (callback) case",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Updated case details",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCase"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Case updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ok": { "type": "boolean" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/case/delete/{id}": {
+            "delete": {
+                "summary": "Delete a case",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Case deletion response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ok": { "type": "boolean" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "NewCase": {
+                "type": "object",
+                "properties": {
+                    "caseName": { "type": "string" },
+                    "caseToken": { "type": "string" },
+                    "caseTimeout": { "type": "integer" },
+                    "returnTime": { "type": "integer" }
+                  },
+                "required": ["caseName", "caseToken", "caseTimeout", "returnTime"]
+            },
+            "AddCaseResponse": {
+                "type": "object",
+                "properties": {
+                    "ok": { "type": "boolean" },
+                    "data": { "type": "integer" }
+                },
+                "required": ["ok", "data"]
+            },
+            "ListCaseQuery": {
+                "type": "object",
+                "properties": {
+                    "orderBy": {
+                        "type": "string",
+                        "enum": [
+                            "id",
+                            "caseName",
+                            "caseToken",
+                            "caseTimeout",
+                            "returnTime",
+                            "caseSucceed",
+                            "caseFinished"
+                        ],
+                        "examples": ["id"]
+                    },
+                    "asc": { "type": "boolean" },
+                    "pageNo": { "type": "integer", "examples": [1] },
+                    "pageSize": { "type": "integer", "examples": [10] }
+                }
+            },
+            "Case": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "integer" },
+                    "caseName": { "type": "string" },
+                    "caseToken": { "type": "string" },
+                    "caseTimeout": { "type": "integer" },
+                    "returnTime": { "type": "integer" },
+                    "caseSucceed": { "type": "boolean" },
+                    "caseFinished": { "type": "boolean" }
+                }
+            },
+            "ListCaseResponse": {
+                "type": "object",
+                "properties": {
+                    "ok": { "type": "boolean" },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Case"
+                        }
+                    }
+                }
+            },
+            "UpdateCase": {
+                "type": "object",
+                "properties": {
+                    "caseName": { "type": "string" },
+                    "caseToken": { "type": "string" },
+                    "caseSucceed": { "type": "boolean" }
+                },
+                "required": ["caseName", "caseToken", "caseSucceed"]
+            }
+        }
+    }
+}
