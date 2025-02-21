@@ -1,9 +1,7 @@
 version: "3.8"
 services:
   server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    image: registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-server
     ports:
       - "3000:3000"
     environment:
@@ -14,13 +12,11 @@ services:
         constraints:
           - node.labels.role == server
   case:
-    build:
-      context: ./case
-      dockerfile: Dockerfile
+    image: registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-case
     depends_on:
       - server
     environment:
-      - SERVER_URL=http://localhost:3000
+      - SERVER_URL=http://10.121.118.11:3000
     deploy:
       replicas: 2  # 或者任意你想要的数量
       placement:

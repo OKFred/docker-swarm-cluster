@@ -17,5 +17,7 @@ RUN pnpm install
 # 复制所有源代码
 COPY . .
 
+EXPOSE 3000
+
 # 执行启动命令
 CMD ["pnpm", "run" ,"start"]
