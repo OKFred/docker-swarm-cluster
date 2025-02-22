@@ -11,6 +11,8 @@ services:
       placement:
         constraints:
           - node.labels.role == server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   case:
     image: registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-case
     depends_on:

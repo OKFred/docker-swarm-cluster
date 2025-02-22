@@ -6,6 +6,7 @@ import path from "path";
 import { eq, asc, desc } from "drizzle-orm";
 import { db } from "./db/index.js";
 import { myCaseTable } from "./db/schema.js";
+import "./docker/index.js";
 const app = new Hono();
 app.use(logger());
 // 添加 case 接口

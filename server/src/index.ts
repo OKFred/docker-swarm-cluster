@@ -7,6 +7,7 @@ import { eq, asc, desc } from "drizzle-orm";
 import { db } from "./db/index.js";
 import { myCaseTable } from "./db/schema.js";
 import type { myCaseLike, myCaseInsertLike } from "./db/schema.js";
+import "./docker/index.js";
 
 const app = new Hono();
 app.use(logger());
