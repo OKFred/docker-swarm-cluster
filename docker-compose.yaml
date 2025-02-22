@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  server:
+  server: #提供接口，读写任务数据库
     image: registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-server
     ports:
       - "3000:3000"
@@ -13,14 +13,13 @@ services:
           - node.labels.role == server
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  case:
-    image: registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-case
+  user: #每隔一段时间，调用server接口，生成任务
+    image: registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-user
     depends_on:
       - server
     environment:
       - SERVER_URL=http://10.121.118.11:3000
     deploy:
-      replicas: 2  # 或者任意你想要的数量
       placement:
         constraints:
-          - node.labels.role == case
+          - node.labels.role == server

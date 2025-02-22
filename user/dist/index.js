@@ -18,7 +18,7 @@ async function runCase() {
         console.log("Created case with ID:", id);
         // 调用 get 接口获取 case 详情
         const details = await getCase(id);
-        console.log("Case details:", details);
+        // console.log("Case details:", details);
         // 模拟等待 returnTime 后发起回调
         await new Promise((resolve) => setTimeout(resolve, details.returnTime));
     }
