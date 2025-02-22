@@ -16,6 +16,7 @@ RUN pnpm install
 
 # 复制所有源代码
 COPY . .
+RUN pnpm run build
 
 # 执行启动命令
 CMD ["pnpm", "run" ,"start"]

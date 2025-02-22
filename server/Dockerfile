@@ -16,6 +16,7 @@ RUN pnpm install
 
 # 复制所有源代码
 COPY . .
+RUN pnpm run build
 
 EXPOSE 3000
 
