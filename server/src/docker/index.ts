@@ -19,7 +19,7 @@ export async function createService(caseId: number) {
         TaskTemplate: {
             ContainerSpec: {
                 Image: "registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-case", // 使用预先构建好的镜像
-                Env: [`SERVER_URL=http://localhost:3000`, `CASE_ID=${caseId}`], // 环境变量
+                Env: [`SERVER_URL=http://10.121.118.11:3000`, `CASE_ID=${caseId}`], // 环境变量
             },
             Resources: {
                 Limits: { MemoryBytes: 1000000000 }, // 根据需要配置资源限制
