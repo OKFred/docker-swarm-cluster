@@ -20,9 +20,8 @@ export async function cleanDeadServices() {
         const inspect = await service.inspect();
         //如果Tasks都是complete状态，那么删除服务
         if (
-            inspect.ServiceStatus.TaskStatus.filter(
-                (task: { State: string }) => task.State === "complete",
-            ).length === inspect.ServiceStatus.TaskStatus.length
+            inspect.Spec.Mode.Replicated.Replicas ===
+            inspect.Spec.TaskTemplate.ContainerSpec.Env.length
         ) {
             console.log(`Removing dead service ${serviceInfo.ID}`);
             await service.remove();
