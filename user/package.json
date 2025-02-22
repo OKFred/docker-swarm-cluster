@@ -1,0 +1,19 @@
+{
+    "name": "case-user",
+    "version": "0.0.1",
+    "description": "Make new cases",
+    "type": "module",
+    "main": "./src/index.js",
+    "scripts": {
+        "build": "tsc",
+        "start:ts": "node ./src/index.ts",
+        "start": "node ./dist/index.js"
+    },
+    "dependencies": {
+        "axios": "^1.7.9",
+        "dotenv": "^16.4.7"
+    },
+    "devDependencies": {
+        "@types/node": "^22.13.4"
+    }
+}
