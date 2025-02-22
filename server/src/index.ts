@@ -3,7 +3,7 @@ import { serve } from "@hono/node-server";
 import { logger } from "hono/logger";
 import fs from "fs";
 import path from "path";
-import { eq, asc, desc } from "drizzle-orm";
+import { and, eq, asc, desc } from "drizzle-orm";
 import { db } from "./db/index.js";
 import { myCaseTable } from "./db/schema.js";
 import type { myCaseLike, myCaseInsertLike } from "./db/schema.js";
@@ -16,7 +16,7 @@ app.use(logger());
 app.post("/api/case/add", async (c) => {
     try {
         const { caseName, caseToken, caseTimeout, returnTime } = await c.req.json();
-        await db
+        const resultAdd = await db
             .insert(myCaseTable)
             .values({
                 caseName,
@@ -25,15 +25,17 @@ app.post("/api/case/add", async (c) => {
                 returnTime,
             })
             .run();
+        console.log({ resultAdd });
         // 通过 caseName 查询该记录获取自增的 id
         const inserted = await db
             .select()
             .from(myCaseTable)
-            .where(eq(myCaseTable.caseName, caseName))
+            .where(and(eq(myCaseTable.caseName, caseName), eq(myCaseTable.caseToken, caseToken)))
             .limit(1);
         if (inserted.length === 0) {
             return c.json({ ok: false, message: "Insertion failed" });
         }
+        console.log({ inserted });
         setTimeout(() => {
             createService(inserted[0].id);
         }, 0);
@@ -92,11 +94,11 @@ app.get("/api/case/get/:id", async (c) => {
 app.post("/api/case/update/:id", async (c) => {
     try {
         const id = Number(c.req.param("id"));
-        const { caseName, caseToken, caseSucceed } = await c.req.json();
+        const { caseSucceed } = await c.req.json();
         const timeUpdated = new Date().toISOString();
         await db
             .update(myCaseTable)
-            .set({ caseName, caseToken, caseSucceed, caseFinished: true, timeUpdated })
+            .set({ caseSucceed, caseFinished: true, timeUpdated })
             .where(eq(myCaseTable.id, id));
         // 返回更新后的记录
         const updated = await db.select().from(myCaseTable).where(eq(myCaseTable.id, id)).limit(1);

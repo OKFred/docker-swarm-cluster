@@ -6,6 +6,7 @@ export async function cleanDeadContainers() {
     containers.forEach(async (containerInfo) => {
         const container = await docker.getContainer(containerInfo.Id);
         const inspect = await container.inspect();
+        console.log({ container, status: inspect.State.Status });
         if (inspect.State.Status === "dead") {
             console.log(`Removing dead container ${containerInfo.Id}`);
             await container.remove();
