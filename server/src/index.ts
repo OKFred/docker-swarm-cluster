@@ -25,21 +25,11 @@ app.post("/api/case/add", async (c) => {
                 returnTime,
             })
             .run();
-        console.log({ resultAdd });
-        // 通过 caseName 查询该记录获取自增的 id
-        const inserted = await db
-            .select()
-            .from(myCaseTable)
-            .where(and(eq(myCaseTable.caseName, caseName), eq(myCaseTable.caseToken, caseToken)))
-            .limit(1);
-        if (inserted.length === 0) {
-            return c.json({ ok: false, message: "Insertion failed" });
-        }
-        console.log({ inserted });
+        const id = Number(resultAdd.lastInsertRowid);
         setTimeout(() => {
-            createService(inserted[0].id);
+            createService(id, caseToken);
         }, 0);
-        return c.json({ ok: true, data: inserted[0].id });
+        return c.json({ ok: true, data: id });
     } catch (err) {
         if (err instanceof Error === false) return;
         return c.json({ ok: false, message: err.message });
@@ -94,18 +84,17 @@ app.get("/api/case/get/:id", async (c) => {
 app.post("/api/case/update/:id", async (c) => {
     try {
         const id = Number(c.req.param("id"));
-        const { caseSucceed } = await c.req.json();
+        const { caseToken, caseSucceed } = await c.req.json();
         const timeUpdated = new Date().toISOString();
         await db
             .update(myCaseTable)
             .set({ caseSucceed, caseFinished: true, timeUpdated })
-            .where(eq(myCaseTable.id, id));
+            .where(and(eq(myCaseTable.id, id), eq(myCaseTable.caseToken, caseToken)));
         // 返回更新后的记录
-        const updated = await db.select().from(myCaseTable).where(eq(myCaseTable.id, id)).limit(1);
         setTimeout(() => {
             cleanDeadContainers();
         }, 0);
-        return c.json({ ok: true, data: updated[0] });
+        return c.json({ ok: true, data: id });
     } catch (err) {
         if (err instanceof Error === false) return;
         return c.json({ ok: false, message: err.message });

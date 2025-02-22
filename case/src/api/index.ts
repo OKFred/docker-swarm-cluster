@@ -33,10 +33,7 @@ export async function getCase(id: any) {
  * @param {Object} callbackBody 回调数据
  * @returns {Promise<Object>} 返回更新结果
  */
-export async function updateCase(
-    id: any,
-    callbackBody: { caseName: any; caseToken: any; caseSucceed: boolean },
-) {
+export async function updateCase(id: any, callbackBody: { caseToken: any; caseSucceed: boolean }) {
     const response = await axios.post(`${SERVER_URL}/api/case/update/${id}`, callbackBody);
     return response.data.data;
 }

@@ -6,21 +6,24 @@ export async function cleanDeadContainers() {
     containers.forEach(async (containerInfo) => {
         const container = await docker.getContainer(containerInfo.Id);
         const inspect = await container.inspect();
-        console.log({ container, status: inspect.State.Status });
-        if (inspect.State.Status === "dead") {
+        if (inspect.State.Status === "exited") {
             console.log(`Removing dead container ${containerInfo.Id}`);
             await container.remove();
         }
     });
 }
 
-export async function createService(caseId: number) {
+export async function createService(caseId: number, caseToken: string) {
     const serviceOptions = {
         Name: `case-service-${caseId}`, // 根据任务ID生成服务名称
         TaskTemplate: {
             ContainerSpec: {
                 Image: "registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-case", // 使用预先构建好的镜像
-                Env: [`SERVER_URL=http://10.121.118.11:3000`, `CASE_ID=${caseId}`], // 环境变量
+                Env: [
+                    `SERVER_URL=http://10.121.118.11:3000`,
+                    `CASE_ID=${caseId}`,
+                    `CASE_TOKEN=${caseToken}`,
+                ], // 环境变量
             },
             Resources: {
                 Limits: { MemoryBytes: 1000000000 }, // 根据需要配置资源限制

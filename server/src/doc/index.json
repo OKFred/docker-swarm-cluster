@@ -191,7 +191,7 @@
                     "caseToken": { "type": "string" },
                     "caseTimeout": { "type": "integer" },
                     "returnTime": { "type": "integer" }
-                  },
+                },
                 "required": ["caseName", "caseToken", "caseTimeout", "returnTime"]
             },
             "AddCaseResponse": {
@@ -250,11 +250,10 @@
             "UpdateCase": {
                 "type": "object",
                 "properties": {
-                    "caseName": { "type": "string" },
                     "caseToken": { "type": "string" },
                     "caseSucceed": { "type": "boolean" }
                 },
-                "required": ["caseName", "caseToken", "caseSucceed"]
+                "required": ["caseToken", "caseSucceed"]
             }
         }
     }

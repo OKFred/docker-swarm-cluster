@@ -20,7 +20,6 @@ async function runCase() {
         await new Promise((resolve) => setTimeout(resolve, details.returnTime));
 
         const callbackBody = {
-            caseName: details.caseName,
             caseToken: details.caseToken,
             // 根据 caseTimeout 与 returnTime 判断 case 成功与否
             caseSucceed: details.caseTimeout > details.returnTime,
