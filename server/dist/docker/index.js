@@ -7,4 +7,9 @@ async function scaleService(serviceName, replicas) {
     // await service.update({ version: serviceInfo.Version.Index, Spec: serviceInfo.Spec });
     console.log(docker);
 }
-scaleService("my-stack_airbot-case", 10);
+async function getAllContainers() {
+    const containers = await docker.listContainers();
+    console.log(containers);
+}
+getAllContainers();
+// scaleService("my-stack_airbot-case", 10);

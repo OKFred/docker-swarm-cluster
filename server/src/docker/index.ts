@@ -9,4 +9,9 @@ async function scaleService(serviceName: string, replicas: number) {
     console.log(docker);
 }
 
-scaleService("my-stack_airbot-case", 10);
+async function getAllContainers() {
+    const containers = await docker.listContainers();
+    console.log(containers);
+}
+getAllContainers();
+// scaleService("my-stack_airbot-case", 10);
