@@ -7,7 +7,7 @@ import { eq, asc, desc } from "drizzle-orm";
 import { db } from "./db/index.js";
 import { myCaseTable } from "./db/schema.js";
 import type { myCaseLike, myCaseInsertLike } from "./db/schema.js";
-import "./docker/index.js";
+import { cleanDeadContainers, createService } from "./docker/index.js";
 
 const app = new Hono();
 app.use(logger());
@@ -34,6 +34,9 @@ app.post("/api/case/add", async (c) => {
         if (inserted.length === 0) {
             return c.json({ ok: false, message: "Insertion failed" });
         }
+        setTimeout(() => {
+            createService(inserted[0].id);
+        }, 0);
         return c.json({ ok: true, data: inserted[0].id });
     } catch (err) {
         if (err instanceof Error === false) return;
@@ -97,6 +100,9 @@ app.post("/api/case/update/:id", async (c) => {
             .where(eq(myCaseTable.id, id));
         // 返回更新后的记录
         const updated = await db.select().from(myCaseTable).where(eq(myCaseTable.id, id)).limit(1);
+        setTimeout(() => {
+            cleanDeadContainers();
+        }, 0);
         return c.json({ ok: true, data: updated[0] });
     } catch (err) {
         if (err instanceof Error === false) return;
