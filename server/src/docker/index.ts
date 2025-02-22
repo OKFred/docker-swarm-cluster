@@ -13,6 +13,23 @@ export async function cleanDeadContainers() {
     });
 }
 
+export async function cleanDeadServices() {
+    const services = await docker.listServices();
+    services.forEach(async (serviceInfo) => {
+        const service = await docker.getService(serviceInfo.ID);
+        const inspect = await service.inspect();
+        //如果Tasks都是complete状态，那么删除服务
+        if (
+            inspect.ServiceStatus.TaskStatus.filter(
+                (task: { State: string }) => task.State === "complete",
+            ).length === inspect.ServiceStatus.TaskStatus.length
+        ) {
+            console.log(`Removing dead service ${serviceInfo.ID}`);
+            await service.remove();
+        }
+    });
+}
+
 export async function createService(caseId: number, caseToken: string) {
     const serviceOptions = {
         Name: `case-service-${caseId}`, // 根据任务ID生成服务名称
