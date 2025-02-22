@@ -16,7 +16,7 @@ async function runCase() {
         // 调用 server 添加 case 接口
         const id = await addCase(newCase);
         console.log("Created case with ID:", id);
-        // 调用 run 接口获取 case 详情
+        // 调用 detail 接口获取 case 详情
         const details = await getCase(id);
         console.log("Case details:", details);
         // 模拟等待 returnTime 后发起回调

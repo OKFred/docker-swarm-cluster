@@ -1,6 +1,6 @@
 {
     "name": "case-client",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Case client application",
     "type": "module",
     "main": "./src/index.js",

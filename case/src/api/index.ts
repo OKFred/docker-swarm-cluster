@@ -23,7 +23,7 @@ export async function addCase(newCase: {
  * @returns {Promise<Object>} 返回 case 详情
  */
 export async function getCase(id: any) {
-    const response = await axios.get(`${SERVER_URL}/api/case/run/${id}`);
+    const response = await axios.get(`${SERVER_URL}/api/case/get/${id}`);
     return response.data.data;
 }
 

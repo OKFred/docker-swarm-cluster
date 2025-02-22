@@ -19,7 +19,7 @@ async function runCase() {
         const id = await addCase(newCase);
         console.log("Created case with ID:", id);
 
-        // 调用 run 接口获取 case 详情
+        // 调用 get 接口获取 case 详情
         const details = await getCase(id);
         console.log("Case details:", details);
 

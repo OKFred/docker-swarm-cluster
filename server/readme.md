@@ -28,7 +28,7 @@
   - /api/case/list
     - req param schema: { orderBy: string, asc: boolean, pageNo: int, pageSize: int }
     - return with { "data": [ { id; caseName; caseToken; caseTimeout; returnTime; callbackURL; caseSucceed; caseFinished } ]; "ok": boolean }
-  - /api/case/run/{id}
+  - /api/case/get/{id}
     Use docker swarm to run the case with the following environment variables:
     - CASE_NAME
     - CASE_TOKEN

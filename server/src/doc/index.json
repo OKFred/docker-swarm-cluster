@@ -83,7 +83,7 @@
                 }
             }
         },
-        "/api/case/run/{id}": {
+        "/api/case/get/{id}": {
             "get": {
                 "summary": "Get case details (for running case)",
                 "parameters": [
