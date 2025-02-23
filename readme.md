@@ -9,7 +9,7 @@
 ## Run
 
 ```bash
-bash docker-deploy.sh
+docker stack deploy -c docker-compose.yaml my-custer
 ```
 
 ## License
