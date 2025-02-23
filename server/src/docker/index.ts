@@ -6,7 +6,8 @@ export async function cleanDeadContainers() {
     containers.forEach(async (containerInfo) => {
         const container = await docker.getContainer(containerInfo.Id);
         const inspect = await container.inspect();
-        if (inspect.State.Status === "exited") {
+        //且名称不包含case
+        if (inspect.State.Status === "exited" && !containerInfo.Names[0].includes("case")) {
             console.log(`Removing dead container ${containerInfo.Id}`);
             await container.remove();
         }
