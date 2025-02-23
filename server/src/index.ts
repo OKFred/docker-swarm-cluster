@@ -7,7 +7,7 @@ import { and, eq, asc, desc } from "drizzle-orm";
 import { db } from "./db/index.js";
 import { myCaseTable } from "./db/schema.js";
 import type { myCaseLike, myCaseInsertLike } from "./db/schema.js";
-import { cleanDeadServices, createService } from "./docker/index.js";
+import { createOrUpdateService } from "./docker/index.js";
 
 const app = new Hono();
 app.use(logger());
@@ -26,8 +26,8 @@ app.post("/api/case/add", async (c) => {
             })
             .run();
         const id = Number(resultAdd.lastInsertRowid);
-        setTimeout(() => {
-            createService(id, caseToken);
+        setTimeout(async () => {
+            await createOrUpdateService(id, caseToken, 60_000, 1);
         }, 0);
         return c.json({ ok: true, data: id });
     } catch (err) {
@@ -90,12 +90,12 @@ app.post("/api/case/update/:id", async (c) => {
             .update(myCaseTable)
             .set({ caseSucceed, caseFinished: true, timeUpdated })
             .where(and(eq(myCaseTable.id, id), eq(myCaseTable.caseToken, caseToken)));
-        // 返回更新后的记录
-        setTimeout(() => {
-            cleanDeadServices();
+        setTimeout(async () => {
+            await createOrUpdateService(id, caseToken, 10_000, 0);
         }, 0);
         return c.json({ ok: true, data: id });
     } catch (err) {
+        console.log(err);
         if (err instanceof Error === false) return;
         return c.json({ ok: false, message: err.message });
     }

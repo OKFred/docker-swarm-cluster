@@ -1,36 +1,35 @@
 import Docker from "dockerode";
 const docker = new Docker({ socketPath: "/var/run/docker.sock" });
 
-export async function cleanDeadContainers() {
+export async function cleanDeadContainers(count?: number) {
     const containers = await docker.listContainers({ all: true });
+    const containerPendingRemoval = [] as Docker.ContainerInfo[];
     containers.forEach(async (containerInfo) => {
-        const container = await docker.getContainer(containerInfo.Id);
-        const inspect = await container.inspect();
         //且名称不包含case
-        if (inspect.State.Status === "exited" && !containerInfo.Names[0].includes("case")) {
-            console.log(`Removing dead container ${containerInfo.Id}`);
-            await container.remove();
+        if (containerInfo.State === "exited") {
+            containerPendingRemoval.push(containerInfo);
         }
     });
-}
-
-export async function cleanDeadServices() {
-    const services = await docker.listServices();
-    services.forEach(async (serviceInfo) => {
-        const service = await docker.getService(serviceInfo.ID);
-        const inspect = await service.inspect();
-        //如果Tasks都是complete状态，那么删除服务
-        if (
-            inspect.Spec.Mode.Replicated.Replicas ===
-            inspect.Spec.TaskTemplate.ContainerSpec.Env.length
-        ) {
-            console.log(`Removing dead service ${serviceInfo.ID}`);
-            await service.remove();
+    let maxRemovalCount =
+        count && count >= containerPendingRemoval.length ? count : containerPendingRemoval.length;
+    for (let i = 0; i < maxRemovalCount; i++) {
+        const container = containerPendingRemoval[i];
+        try {
+            await docker.getContainer(container.Id).remove({ force: true });
+            console.log(`Removed container: ${container.Id}`);
+        } catch (error) {
+            console.error("Failed to remove container:", error);
         }
-    });
+    }
 }
 
-export async function createService(caseId: number, caseToken: string) {
+export async function createOrUpdateService(
+    caseId: number,
+    caseToken: string,
+    timeout = 60_000,
+    replicas: number,
+) {
+    console.log({ replicas });
     const serviceOptions = {
         Name: `case-service-${caseId}`, // 根据任务ID生成服务名称
         TaskTemplate: {
@@ -48,15 +47,36 @@ export async function createService(caseId: number, caseToken: string) {
         },
         Mode: {
             Replicated: {
-                Replicas: 1, // 根据需要设置副本数
+                Replicas: replicas, // 根据需要设置副本数，副本为0时，服务将停止运行
             },
         },
         Placement: {
             Constraints: ["node.labels.role == case"], // 限制容器在拥有 'case' 标签的节点上运行
         },
     };
-    docker
-        .createService(serviceOptions)
-        .then((service) => console.log(`Created case service: ${service.id}`))
-        .catch((err) => console.error(`Error creating case service: ${err}`));
+    let dockerServiceId: string;
+    //如果服务存在，更新服务配置
+    try {
+        const service = await docker.createService(serviceOptions);
+        dockerServiceId = service.id;
+    } catch (err) {
+        // console.error(`Error updating case service: ${err}`);
+        const service = await docker.getService(serviceOptions.Name);
+        await service.update(serviceOptions);
+        dockerServiceId = service.id;
+    }
+    setTimeout(() => {
+        console.log("removeService", caseId);
+        removeService(dockerServiceId);
+    }, timeout);
+    return dockerServiceId;
+}
+
+export async function removeService(dockerServiceId: string) {
+    try {
+        await docker.getService(dockerServiceId).remove();
+        console.log(`Removed case service: ,`, dockerServiceId);
+    } catch (err) {
+        console.error(`Error removing case service: ${err}`);
+    }
 }
