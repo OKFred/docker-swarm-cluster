@@ -7,6 +7,7 @@ services:
     environment:
       - PORT=3000
       - DB_FILE_NAME=file:local.db
+      - FEISHU_WEBHOOK=https://open.feishu.cn/open-apis/bot/v2/hook/60adf83f-2ccb-4ebb-a152-a0eeedd604f5
     deploy:
       placement:
         constraints:

@@ -8,6 +8,7 @@ import { db } from "./db/index.js";
 import { myCaseTable } from "./db/schema.js";
 import type { myCaseLike, myCaseInsertLike } from "./db/schema.js";
 import { createOrUpdateService } from "./docker/index.js";
+import { sendFeishuMessage } from "./rpc/feishu/instance.js";
 
 const app = new Hono();
 app.use(logger());
@@ -167,3 +168,16 @@ setTimeout(() => {
     });
     console.log(`Server listening on http://localhost:${PORT}`);
 }, 0);
+
+/**
+ * @description: 未捕获异常处理事件上报
+ */
+process.on("uncaughtException", function (err) {
+    console.error("uncaughtException:", err);
+    sendFeishuMessage("uncaughtException:" + err);
+});
+
+sendFeishuMessage("服务器已启动").then(async (res) => {
+    const result = await res?.json();
+    console.log(result);
+});
