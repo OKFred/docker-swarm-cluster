@@ -8,9 +8,15 @@
 
 ## Run
 
+**Please modify SERVER_URL first in [docker-compose.yaml](docker-compose.yaml)**
+
 ```bash
 docker stack deploy -c docker-compose.yaml my-custer
 ```
+
+## API Docs
+
+[http://localhost:3000/doc](http://localhost:3000/doc)
 
 ## License
 
