@@ -14,6 +14,7 @@ export async function addCase(newCase: {
     returnTime: number;
 }) {
     const response = await axios.post(`${SERVER_URL}/api/case/add`, newCase);
+    if (response.data.ok === false) throw new Error("not ok");
     return response.data.data;
 }
 
@@ -24,6 +25,7 @@ export async function addCase(newCase: {
  */
 export async function getCase(id: any) {
     const response = await axios.get(`${SERVER_URL}/api/case/get/${id}`);
+    if (response.data.ok === false) throw new Error("not ok");
     return response.data.data;
 }
 
@@ -35,6 +37,7 @@ export async function getCase(id: any) {
  */
 export async function updateCase(id: any, callbackBody: { caseToken: any; caseSucceed: boolean }) {
     const response = await axios.post(`${SERVER_URL}/api/case/update/${id}`, callbackBody);
+    if (response.data.ok === false) throw new Error("not ok");
     return response.data.data;
 }
 
@@ -45,5 +48,6 @@ export async function updateCase(id: any, callbackBody: { caseToken: any; caseSu
  */
 export async function deleteCase(id: any) {
     const response = await axios.delete(`${SERVER_URL}/api/case/delete/${id}`);
+    if (response.data.ok === false) throw new Error("not ok");
     return response.data.data;
 }
