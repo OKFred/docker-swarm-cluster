@@ -32,13 +32,13 @@ async function initCase() {
     updateTimeout();
 }
 
-let demoTimeout = 10_000;
+let demoTimeout = 1_000;
 function runLoop() {
     initCase().finally(() => setTimeout(runLoop, demoTimeout));
 }
 
 function updateTimeout() {
-    demoTimeout = Math.floor(Math.random() * 20000);
+    demoTimeout = Math.floor(Math.random() * 500);
     console.log("Running next case in ", Number(demoTimeout / 1000).toFixed(2), "s");
 }
 
