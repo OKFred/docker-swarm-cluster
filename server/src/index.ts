@@ -16,6 +16,7 @@ app.use(logger());
 app.post("/api/case/add", async (c) => {
     try {
         const { caseName, caseToken, caseTimeout, returnTime } = await c.req.json();
+        const expectedTime = new Date().valueOf() + caseTimeout;
         const resultAdd = await db
             .insert(myCaseTable)
             .values({
@@ -23,11 +24,13 @@ app.post("/api/case/add", async (c) => {
                 caseToken,
                 caseTimeout,
                 returnTime,
+                expectedTime,
             })
             .run();
         const id = Number(resultAdd.lastInsertRowid);
         setTimeout(async () => {
-            await createOrUpdateService(id, caseToken, 60_000, 1);
+            const serviceId = await createOrUpdateService(id, caseToken, 60_000, 1);
+            await db.update(myCaseTable).set({ serviceId }).where(eq(myCaseTable.id, id));
         }, 0);
         return c.json({ ok: true, data: id });
     } catch (err) {
@@ -84,15 +87,32 @@ app.get("/api/case/get/:id", async (c) => {
 app.post("/api/case/update/:id", async (c) => {
     try {
         const id = Number(c.req.param("id"));
-        const { caseToken, caseSucceed } = await c.req.json();
-        const timeUpdated = new Date().toISOString();
-        await db
+        const { expectedTime, caseToken, caseSucceed } = await c.req.json();
+        const updateTime = new Date().toISOString();
+        const rows = await db.select().from(myCaseTable).where(eq(myCaseTable.id, id)).limit(1);
+        if (rows.length === 0) return c.json({ ok: false, message: "Case not found" });
+        const { serviceId, maxRetry, retryCount } = rows[0];
+        const newRetryCount = retryCount ? retryCount + 1 : 1;
+        if (maxRetry && newRetryCount > maxRetry) {
+            console.log("max retry count reached");
+            return c.json({ ok: false, message: "Max retry count reached" });
+        }
+        const TimeDifference = new Date().valueOf() - expectedTime;
+        if (TimeDifference < 0) {
+            console.log("still running");
+            return c.json({ ok: false, data: "still running" });
+        }
+        const res = await db
             .update(myCaseTable)
-            .set({ caseSucceed, caseFinished: true, timeUpdated })
+            .set({ caseSucceed, caseFinished: true, updateTime, retryCount: newRetryCount })
             .where(and(eq(myCaseTable.id, id), eq(myCaseTable.caseToken, caseToken)));
-        setTimeout(async () => {
-            await createOrUpdateService(id, caseToken, 10_000, 0);
-        }, 0);
+        if (res.rowsAffected === 0) {
+            return c.json({ ok: false, message: "Case not found" });
+        }
+        /* setTimeout(async () => {
+            console.log("超时，准备清理容器");
+            // serviceId && removeService(serviceId);
+        }, 20_000); */
         return c.json({ ok: true, data: id });
     } catch (err) {
         console.log(err);

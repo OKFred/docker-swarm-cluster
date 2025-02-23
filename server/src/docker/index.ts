@@ -46,9 +46,13 @@ export async function createOrUpdateService(
             },
         },
         Mode: {
-            Replicated: {
-                Replicas: replicas, // 根据需要设置副本数，副本为0时，服务将停止运行
+            ReplicatedJob: {
+                MaxConcurrent: replicas,
+                TotalCompletions: replicas,
             },
+        },
+        RestartPolicy: {
+            Condition: "none", // 重启策略
         },
         Placement: {
             Constraints: ["node.labels.role == case"], // 限制容器在拥有 'case' 标签的节点上运行

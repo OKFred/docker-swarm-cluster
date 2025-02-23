@@ -15,16 +15,28 @@ async function runCase() {
         // 调用 get 接口获取 case 详情
         const details = await getCase(id);
         console.log("Case details:", details);
-
-        // 模拟等待 returnTime 后发起回调
-        await new Promise((resolve) => setTimeout(resolve, details.returnTime));
+        const { expectedTime, maxRetry, tryCount } = details;
+        if (tryCount >= maxRetry) {
+            console.log("no more tries");
+            return;
+        }
 
         const callbackBody = {
             caseToken: details.caseToken,
             // 根据 caseTimeout 与 returnTime 判断 case 成功与否
             caseSucceed: details.caseTimeout > details.returnTime,
+            expectedTime,
         };
-
+        const TimeDifference = new Date().valueOf() - expectedTime;
+        if (TimeDifference > 0) {
+            console.log("case timeout");
+            callbackBody.expectedTime = null;
+        } else {
+            console.log("still running");
+            await new Promise((resolve) => setTimeout(resolve, TimeDifference));
+        }
+        // 模拟等待 returnTime 后发起回调
+        await new Promise((resolve) => setTimeout(resolve, details.returnTime));
         // 发起回调
         const callbackResult = await updateCase(id, callbackBody);
         console.log("Callback response:", callbackResult);
