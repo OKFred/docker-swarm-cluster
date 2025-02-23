@@ -11,8 +11,8 @@ async function runCase() {
         const newCase = {
             caseName: CASE_NAME,
             caseToken: CASE_TOKEN,
-            caseTimeout: Math.floor(Math.random() * 10000),
-            returnTime: Math.floor(Math.random() * 10000),
+            caseTimeout: Math.floor(Math.random() * 10000) + 10_000,
+            returnTime: Math.floor(Math.random() * 10000) + 10_000, //加10s，留点时间给case容器生成
         };
 
         // 调用 server 添加 case 接口
