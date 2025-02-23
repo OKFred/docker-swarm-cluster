@@ -12,7 +12,7 @@ export const myCaseTable = sqliteTable("my_case", {
     caseFinished: integer("case_finished", { mode: "boolean" }).notNull().default(false),
     createTime: text("create_time").default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
     updateTime: text("update_time"),
-    expectedTime: integer("expected_time"),
+    expectedTime: text("expected_time"),
     serviceId: text("service_id"),
     retryCount: integer("retry_count"),
     maxRetry: integer("max_retry").default(1),

@@ -233,9 +233,9 @@
                     "returnTime": { "type": "integer" },
                     "caseSucceed": { "type": "boolean" },
                     "caseFinished": { "type": "boolean" },
-                    "createTime": { "type": "integer" },
-                    "updateTime": { "type": "integer" },
-                    "expectedTime": { "type": "integer" },
+                    "createTime": { "type": "string" },
+                    "updateTime": { "type": "string" },
+                    "expectedTime": { "type": "string" },
                     "serviceId": { "type": "integer" },
                     "retryCount": { "type": "integer" },
                     "maxRetry": { "type": "integer" }
@@ -257,7 +257,8 @@
                 "type": "object",
                 "properties": {
                     "caseToken": { "type": "string" },
-                    "caseSucceed": { "type": "boolean" }
+                    "caseSucceed": { "type": "boolean" },
+                    "expectedTime": { "type": "string" }
                 },
                 "required": ["caseToken", "caseSucceed"]
             }

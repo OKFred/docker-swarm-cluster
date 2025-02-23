@@ -16,7 +16,7 @@ app.use(logger());
 app.post("/api/case/add", async (c) => {
     try {
         const { caseName, caseToken, caseTimeout, returnTime } = await c.req.json();
-        const expectedTime = new Date().valueOf() + caseTimeout;
+        const expectedTime = new Date(new Date().valueOf() + caseTimeout).toISOString();
         const resultAdd = await db
             .insert(myCaseTable)
             .values({
@@ -97,7 +97,7 @@ app.post("/api/case/update/:id", async (c) => {
             console.log("max retry count reached");
             return c.json({ ok: false, message: "Max retry count reached" });
         }
-        const TimeDifference = new Date().valueOf() - expectedTime;
+        const TimeDifference = new Date().valueOf() - new Date(expectedTime).valueOf();
         if (TimeDifference < 0) {
             console.log("still running");
             return c.json({ ok: false, data: "still running" });

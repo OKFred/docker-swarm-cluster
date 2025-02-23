@@ -27,7 +27,7 @@ async function runCase() {
             caseSucceed: details.caseTimeout > details.returnTime,
             expectedTime,
         };
-        const TimeDifference = new Date().valueOf() - expectedTime;
+        const TimeDifference = new Date().valueOf() - new Date(expectedTime).valueOf();
         if (TimeDifference > 0) {
             console.log("case timeout");
             callbackBody.expectedTime = null;
