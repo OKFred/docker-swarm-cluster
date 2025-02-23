@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { addCase, getCase, updateCase, deleteCase } from "./api/index.js";
 dotenv.config();
 
-async function runCase() {
+async function initCase() {
     // 没有环境变量就随机生成
     const CASE_NAME = process.env.CASE_NAME || `case-${Math.floor(Math.random() * 10000)}`;
     const CASE_TOKEN = process.env.CASE_TOKEN || `token-${Math.floor(Math.random() * 10000)}`;
@@ -23,7 +23,7 @@ async function runCase() {
         const details = await getCase(id);
         // console.log("Case details:", details);
 
-        // 模拟等待 returnTime 后发起回调
+        // 模拟等待 returnTime
         await new Promise((resolve) => setTimeout(resolve, details.returnTime));
     } catch (err) {
         if (err instanceof Error === false) return;
@@ -32,9 +32,9 @@ async function runCase() {
     updateTimeout();
 }
 
-let demoTimeout = 0;
+let demoTimeout = 10_000;
 function runLoop() {
-    runCase().finally(() => setTimeout(runLoop, demoTimeout));
+    initCase().finally(() => setTimeout(runLoop, demoTimeout));
 }
 
 function updateTimeout() {
