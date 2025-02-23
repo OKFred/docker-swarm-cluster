@@ -232,7 +232,13 @@
                     "caseTimeout": { "type": "integer" },
                     "returnTime": { "type": "integer" },
                     "caseSucceed": { "type": "boolean" },
-                    "caseFinished": { "type": "boolean" }
+                    "caseFinished": { "type": "boolean" },
+                    "createTime": { "type": "integer" },
+                    "updateTime": { "type": "integer" },
+                    "expectedTime": { "type": "integer" },
+                    "serviceId": { "type": "integer" },
+                    "retryCount": { "type": "integer" },
+                    "maxRetry": { "type": "integer" }
                 }
             },
             "ListCaseResponse": {
