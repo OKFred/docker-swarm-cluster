@@ -10,8 +10,12 @@ export const myCaseTable = sqliteTable("my_case", {
     returnTime: integer("return_time").notNull(),
     caseSucceed: integer("case_succeed", { mode: "boolean" }).notNull().default(false),
     caseFinished: integer("case_finished", { mode: "boolean" }).notNull().default(false),
-    timeCreated: text("time_created").default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
-    timeUpdated: text("time_updated"),
+    createTime: text("create_time").default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
+    updateTime: text("update_time"),
+    expectedTime: integer("expected_time"),
+    serviceId: text("service_id"),
+    retryCount: integer("retry_count"),
+    maxRetry: integer("max_retry").default(1),
 });
 
 export type myCaseLike = InferSelectModel<typeof myCaseTable>;
