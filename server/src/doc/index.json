@@ -257,8 +257,7 @@
                 "type": "object",
                 "properties": {
                     "caseToken": { "type": "string" },
-                    "caseSucceed": { "type": "boolean" },
-                    "expectedTime": { "type": "string" }
+                    "caseSucceed": { "type": "boolean" }
                 },
                 "required": ["caseToken", "caseSucceed"]
             }

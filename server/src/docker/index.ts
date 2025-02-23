@@ -29,7 +29,6 @@ export async function createOrUpdateService(
     timeout = 60_000,
     replicas: number,
 ) {
-    console.log({ replicas });
     const serviceOptions = {
         Name: `case-service-${caseId}`, // 根据任务ID生成服务名称
         TaskTemplate: {

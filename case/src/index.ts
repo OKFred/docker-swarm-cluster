@@ -25,12 +25,10 @@ async function runCase() {
             caseToken: details.caseToken,
             // 根据 caseTimeout 与 returnTime 判断 case 成功与否
             caseSucceed: details.caseTimeout > details.returnTime,
-            expectedTime,
         };
         const TimeDifference = new Date().valueOf() - new Date(expectedTime).valueOf();
         if (TimeDifference > 0) {
             console.log("case timeout");
-            callbackBody.expectedTime = null;
         } else {
             console.log("still running");
             await new Promise((resolve) => setTimeout(resolve, TimeDifference));
