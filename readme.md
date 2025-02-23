@@ -2,18 +2,15 @@
 
 ## Prerequisites
 
--   [Node.js latest](https://nodejs.org/download/release/latest/)
--   [Docker](https://www.docker.com/)
+-   Linux Distros with Docker
+    -   [Debian](https://deb.debian.org/debian/dists/bookworm/main/installer-amd64/current/images/)
+    -   [Docker](https://www.docker.com/)
 
-## Run Server
+## Run
 
-1. Run `cd ./server`
-2. Run `npm run start` or `npm run start:ts` for node v23.6.0
-
-## Run Case
-
-1. Run `cd ./case`
-2. Run `npm run start` or `npm run start:ts` for node v23.6.0
+```bash
+bash docker-deploy.sh
+```
 
 ## License
 
