@@ -1,1 +1,0 @@
-cd ./case | pnpm run build | cd ../ | cd ./server | pnpm run build | cd ../ | cd ./user | pnpm run build | cd ../
