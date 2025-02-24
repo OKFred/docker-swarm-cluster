@@ -220,7 +220,8 @@
                     },
                     "asc": { "type": "boolean" },
                     "pageNo": { "type": "integer", "examples": [1] },
-                    "pageSize": { "type": "integer", "examples": [10] }
+                    "pageSize": { "type": "integer", "examples": [10] },
+                    "keyword": { "type": "string" }
                 }
             },
             "Case": {
