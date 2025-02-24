@@ -190,7 +190,20 @@
                     "caseName": { "type": "string" },
                     "caseToken": { "type": "string" },
                     "caseTimeout": { "type": "integer" },
-                    "returnTime": { "type": "integer" }
+                    "returnTime": { "type": "integer" },
+                    "serviceOptions": {
+                        "type": "object",
+                        "properties": {
+                            "Name": { "type": "string" },
+                            "Labels": { "type": "object" },
+                            "TaskTemplate": { "type": "object" },
+                            "Mode": { "type": "object" },
+                            "UpdateConfig": { "type": "object" },
+                            "RollbackConfig": { "type": "object" },
+                            "Networks": { "type": "array" },
+                            "EndpointSpec": { "type": "object" }
+                        }
+                    }
                 },
                 "required": ["caseName", "caseToken", "caseTimeout", "returnTime"]
             },

@@ -24,39 +24,9 @@ export async function cleanDeadContainers(count?: number) {
 }
 
 export async function createOrUpdateService(
-    caseId: number,
-    caseToken: string,
-    timeout = 60_000,
-    replicas: number,
+    serviceOptions: Docker.ServiceSpec,
+    terminateTimeout = 60_000,
 ) {
-    const serviceOptions = {
-        Name: `case-service-${caseId}`, // 根据任务ID生成服务名称
-        TaskTemplate: {
-            ContainerSpec: {
-                Image: "registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-case", // 使用预先构建好的镜像
-                Env: [
-                    `SERVER_URL=http://10.121.118.11:3000`,
-                    `CASE_ID=${caseId}`,
-                    `CASE_TOKEN=${caseToken}`,
-                ], // 环境变量
-            },
-            Resources: {
-                Limits: { MemoryBytes: 1000000000 }, // 根据需要配置资源限制
-            },
-        },
-        Mode: {
-            ReplicatedJob: {
-                MaxConcurrent: replicas,
-                TotalCompletions: replicas,
-            },
-        },
-        RestartPolicy: {
-            Condition: "none", // 重启策略
-        },
-        Placement: {
-            Constraints: ["node.labels.role == case"], // 限制容器在拥有 'case' 标签的节点上运行
-        },
-    };
     let dockerServiceId: string;
     //如果服务存在，更新服务配置
     try {
@@ -64,14 +34,15 @@ export async function createOrUpdateService(
         dockerServiceId = service.id;
     } catch (err) {
         // console.error(`Error updating case service: ${err}`);
+        if (!serviceOptions.Name) return;
         const service = await docker.getService(serviceOptions.Name);
         await service.update(serviceOptions);
         dockerServiceId = service.id;
     }
     setTimeout(() => {
-        console.log("removeService", caseId);
+        console.log("removeService");
         removeService(dockerServiceId);
-    }, timeout);
+    }, terminateTimeout);
     return dockerServiceId;
 }
 

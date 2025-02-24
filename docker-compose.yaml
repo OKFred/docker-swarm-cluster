@@ -1,20 +1,22 @@
 version: "3.8"
 services:
-  server: #提供接口，读写任务数据库
+  server: #提供接口，读写任务数据库，生成集群任务
     image: registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-server
     ports:
       - "3000:3000"
     environment:
       - PORT=3000
+      - SERVER_URL=http://10.121.118.11:3000
       - DB_FILE_NAME=file:local.db
       - FEISHU_WEBHOOK=https://open.feishu.cn/open-apis/bot/v2/hook/60adf83f-2ccb-4ebb-a152-a0eeedd604f5
+      - CASE_IMAGE_NAME=registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-case
     deploy:
       placement:
         constraints:
           - node.labels.role == server
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  user: #每隔一段时间，调用server接口，生成任务
+  user: #每隔一段时间，调用server接口，生成任务（模拟用户）
     image: registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-user
     depends_on:
       - server

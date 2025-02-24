@@ -9,6 +9,15 @@ import { myCaseTable } from "./db/schema.js";
 import type { myCaseLike, myCaseInsertLike } from "./db/schema.js";
 import { createOrUpdateService } from "./docker/index.js";
 import { sendFeishuMessage } from "./rpc/feishu/instance.js";
+import Dockerode from "dockerode";
+import dotenv from "dotenv";
+dotenv.config();
+
+process.env.SERVER_URL ??
+    (console.error("env SERVER_URL is not set") !== void 0 || process.exit(1));
+
+process.env.CASE_IMAGE_NAME ??
+    (console.error("env CASE_IMAGE_NAME is not set") !== void 0 || process.exit(1));
 
 const app = new Hono();
 app.use(logger());
@@ -16,7 +25,7 @@ app.use(logger());
 // 添加 case 接口
 app.post("/api/case/add", async (c) => {
     try {
-        const { caseName, caseToken, caseTimeout, returnTime } = await c.req.json();
+        let { caseName, caseToken, caseTimeout, returnTime, serviceOptions } = await c.req.json();
         const expectedTime = new Date(new Date().valueOf() + caseTimeout).toISOString();
         const resultAdd = await db
             .insert(myCaseTable)
@@ -30,7 +39,40 @@ app.post("/api/case/add", async (c) => {
             .run();
         const id = Number(resultAdd.lastInsertRowid);
         setTimeout(async () => {
-            const serviceId = await createOrUpdateService(id, caseToken, 60_000, 1);
+            if (!serviceOptions) {
+                serviceOptions = {
+                    Name: `case-service-${id}`, // 根据任务ID生成服务名称
+                    TaskTemplate: {
+                        ContainerSpec: {
+                            Image: process.env.CASE_IMAGE_NAME, // 使用预先构建好的镜像
+                            Env: [
+                                `SERVER_URL=${process.env.SERVER_URL}`,
+                                `CASE_ID=${id}`,
+                                `CASE_TOKEN=${caseToken}`,
+                            ], // 环境变量
+                        },
+                        RestartPolicy: {
+                            Condition: "none", // 重启策略
+                            Delay: 5,
+                            MaxAttempts: 3,
+                            Window: 120,
+                        },
+                        Resources: {
+                            Limits: { MemoryBytes: 1000000000 }, // 根据需要配置资源限制
+                        },
+                        Placement: {
+                            Constraints: ["node.labels.role == case"], // 限制容器在拥有 'case' 标签的节点上运行
+                        },
+                    },
+                    Mode: {
+                        ReplicatedJob: {
+                            MaxConcurrent: 1,
+                            TotalCompletions: 1,
+                        }, // 设置任务模式为单次执行
+                    },
+                } satisfies Dockerode.ServiceSpec;
+            } //详见： https://docs.docker.com/reference/compose-file/deploy/
+            const serviceId = await createOrUpdateService(serviceOptions, 60_000);
             await db.update(myCaseTable).set({ serviceId }).where(eq(myCaseTable.id, id));
         }, 0);
         return c.json({ ok: true, data: id });
