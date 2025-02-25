@@ -203,7 +203,8 @@
                             "Networks": { "type": "array" },
                             "EndpointSpec": { "type": "object" }
                         }
-                    }
+                    },
+                    "terminateTimeout": { "type": "integer" }
                 },
                 "required": ["caseName", "caseToken", "caseTimeout", "returnTime"]
             },

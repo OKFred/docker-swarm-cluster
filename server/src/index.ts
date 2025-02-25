@@ -25,7 +25,8 @@ app.use(logger());
 // 添加 case 接口
 app.post("/api/case/add", async (c) => {
     try {
-        let { caseName, caseToken, caseTimeout, returnTime, serviceOptions } = await c.req.json();
+        let { caseName, caseToken, caseTimeout, returnTime, serviceOptions, terminateTimeout } =
+            await c.req.json();
         const expectedTime = new Date(new Date().valueOf() + caseTimeout).toISOString();
         const resultAdd = await db
             .insert(myCaseTable)
@@ -68,7 +69,8 @@ app.post("/api/case/add", async (c) => {
                     },
                 } satisfies Dockerode.ServiceSpec;
             } //详见： https://docs.docker.com/reference/compose-file/deploy/
-            const serviceId = await createOrUpdateService(serviceOptions, 60_000);
+            terminateTimeout ?? (terminateTimeout = 60_000); //设置60秒后自动清理服务（演示用）
+            const serviceId = await createOrUpdateService(serviceOptions, terminateTimeout);
             await db.update(myCaseTable).set({ serviceId }).where(eq(myCaseTable.id, id));
         }, 0);
         return c.json({ ok: true, data: id });
