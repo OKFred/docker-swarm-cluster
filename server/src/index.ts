@@ -52,10 +52,7 @@ app.post("/api/case/add", async (c) => {
                             ], // 环境变量
                         },
                         RestartPolicy: {
-                            Condition: "none", // 重启策略
-                            Delay: 5,
-                            MaxAttempts: 3,
-                            Window: 120,
+                            Condition: "on-failure", // 重启策略
                         },
                         Resources: {
                             Limits: { MemoryBytes: 1000000000 }, // 根据需要配置资源限制
@@ -65,10 +62,9 @@ app.post("/api/case/add", async (c) => {
                         },
                     },
                     Mode: {
-                        ReplicatedJob: {
-                            MaxConcurrent: 1,
-                            TotalCompletions: 1,
-                        }, // 设置任务模式为单次执行
+                        Replicated: {
+                            Replicas: 1,
+                        }, // 任务自动故障转移
                     },
                 } satisfies Dockerode.ServiceSpec;
             } //详见： https://docs.docker.com/reference/compose-file/deploy/
