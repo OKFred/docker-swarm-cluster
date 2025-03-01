@@ -9,7 +9,7 @@ export const useThemeStore = defineStore("theme", {
       : ("light" as themeLike),
   }),
   actions: {
-    async changeTheme() {
+    async toggleTheme() {
       this.theme = this.theme === "dark" ? "light" : "dark";
     },
     getTheme() {

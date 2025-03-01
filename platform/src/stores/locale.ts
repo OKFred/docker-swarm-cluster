@@ -32,7 +32,7 @@ export const useLocaleStore = defineStore("locale", {
       });
       dayjs.locale(lang === "zh-CN" ? "zh-cn" : "en");
     },
-    async changeLang() {
+    async toggleLang() {
       this.locale = this.locale === "zh-CN" ? "en-US" : "zh-CN";
       await this.initLang(this.locale as localeLike);
     },
