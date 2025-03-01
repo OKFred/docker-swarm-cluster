@@ -1,6 +1,7 @@
 <template>
   <div>
     <header>
+      <TheMenu />
       <!-- Add your header content here -->
     </header>
     <main>
@@ -18,6 +19,7 @@
 import { Button } from "ant-design-vue";
 import { useLocaleStore } from "@/stores/locale.ts";
 import { useThemeStore } from "@/stores/theme.ts";
+import TheMenu from "./components/TheMenu.vue";
 const localeStore = useLocaleStore();
 const themeStore = useThemeStore();
 function changeLang() {
