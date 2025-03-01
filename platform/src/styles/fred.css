@@ -9,6 +9,12 @@
   align-items: center;
 }
 
+.my-center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .my-inline-label::before {
   content: "*";
   color: red;

@@ -1,6 +1,8 @@
 <template>
   <a-config-provider :locale="settings.locale === 'zh-CN' ? zhCN : enUS">
-    <Layout />
+    <Suspense fallback="{null}">
+      <Layout />
+    </Suspense>
   </a-config-provider>
 </template>
 
