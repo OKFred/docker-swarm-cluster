@@ -9,8 +9,37 @@
 </head>
 
 <body>
+  <div class="loading-container">
+    <img src="/loading.svg" alt="loading" />
+  </div>
   <div id="app"></div>
+  <script>
+    window.onload = function () {
+      document.querySelector(".loading-container").style.display = "none";
+      document.getElementById("app").style.display = "block";
+    };
+  </script>
   <script type="module" src="/src/main.ts"></script>
 </body>
+<style>
+  #app {
+    display: none;
+  }
+
+  /* 默认隐藏 Vue */
+  .loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    font-size: 20px;
+    color: #333;
+  }
+</style>
 
 </html>
