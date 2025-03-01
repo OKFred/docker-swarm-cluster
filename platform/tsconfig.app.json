@@ -9,6 +9,8 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "noUncheckedSideEffectImports": true,
+        "resolveJsonModule": true,
+        "allowImportingTsExtensions": true,
         "baseUrl": ".", // 设置项目的根目录
         "paths": {
             "@/*": ["src/*"] // 根据你的别名设置路径映射

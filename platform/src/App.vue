@@ -1,22 +1,24 @@
-<script setup lang="ts">
-import Layout from './layout/index.vue'
-</script>
-
 <template>
-  <Layout />
+  <a-config-provider :locale="settings.locale === 'zh-CN' ? zhCN : enUS">
+    <Layout />
+  </a-config-provider>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<script setup lang="ts">
+import Layout from "./layout/index.vue";
+import { useLocaleStore } from "./stores/locale";
+import { useThemeStore } from "./stores/theme";
+import { reactive } from "vue";
+import zhCN from "ant-design-vue/es/locale/zh_CN";
+import enUS from "ant-design-vue/es/locale/en_US";
+
+const localeStore = useLocaleStore();
+const themeStore = useThemeStore();
+
+const settings = reactive({
+  locale: localeStore.getLang(),
+  theme: themeStore.getTheme() === "dark" ? "dark" : "light",
+});
+</script>
+
+<style scoped lang="scss"></style>
