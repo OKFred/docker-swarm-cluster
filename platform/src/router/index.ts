@@ -16,6 +16,7 @@ for (const path in modules) {
     component: modules[path]
   });
 }
+console.table(routes);
  
 const router = createRouter({
   history: createWebHistory(),
