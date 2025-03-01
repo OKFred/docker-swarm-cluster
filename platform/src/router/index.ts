@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 const modules = import.meta.glob("@/pages/**/index.vue");
 const routes: Array<RouteRecordRaw> = [];
@@ -22,7 +22,7 @@ for (const path in modules) {
 }
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 
