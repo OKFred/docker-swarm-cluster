@@ -45,6 +45,7 @@ function makeChildren(routerObj: routesLike, childrenArr: any[]) {
   if (!parent) return false;
   if (!parent.children) parent.children = [];
   parent.children.push(routerObj);
+  delete parent.component;
   return true;
 }
 
