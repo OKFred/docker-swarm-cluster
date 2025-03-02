@@ -7,7 +7,7 @@
         <span class="my-default-padding" @click="toggleToolbar()">
           <Icon name="fab:github" :faObj="{ size: '2x' }" />
         </span>
-        <h1>Dashboard</h1>
+        <h1>{{ TheHeader.data.title }}</h1>
       </div>
       <div class="the-user">
         <div class="my-center-all my-default-padding">
@@ -58,6 +58,7 @@ const menuStore = useMenuStore();
 
 const TheHeader = reactive({
   data: {
+    title: "common.dashboard",
     theme: themeStore.getTheme(),
   },
 });
@@ -77,6 +78,15 @@ watch(
   (theme) => {
     TheHeader.data.theme = theme;
   },
+);
+
+watch(
+  () => localeStore.getLang(),
+  async () => {
+    const t = (await import("@/locales/index")).default;
+    TheHeader.data.title = t("common.dashboard");
+  },
+  { immediate: true },
 );
 </script>
 
