@@ -9,7 +9,7 @@ import type {
 import type { paths } from "@/types/openapi"; //由openapi-typescript自动生成的类型
 import { message } from "ant-design-vue";
 
-type NewRequest<U extends keyof paths, M extends keyof paths[U]> = {
+export type NewRequest<U extends keyof paths, M extends keyof paths[U]> = {
   url: U;
   method: M;
   headers?: paths[U][M] extends { parameters: { header?: infer H } }
@@ -18,13 +18,13 @@ type NewRequest<U extends keyof paths, M extends keyof paths[U]> = {
   path?: paths[U][M] extends { parameters: { path?: infer P } } ? P : never;
   params?: paths[U][M] extends { parameters: { query?: infer Q } } ? Q : never;
   data?: paths[U][M] extends {
-    requestBody: { content?: { "application/json": infer B } };
+    requestBody: { content: { "application/json": infer B } };
   }
     ? B
     : never;
 };
 
-type NewResponse<U extends keyof paths, M extends keyof paths[U]> = {
+export type NewResponse<U extends keyof paths, M extends keyof paths[U]> = {
   data: paths[U][M] extends {
     responses: { 200: { content: { "application/json": infer T } } };
   }

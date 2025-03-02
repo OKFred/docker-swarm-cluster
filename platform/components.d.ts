@@ -28,6 +28,7 @@ declare module 'vue' {
     ARow: typeof import('ant-design-vue/es')['Row']
     AStatistic: typeof import('ant-design-vue/es')['Statistic']
     ASwitch: typeof import('ant-design-vue/es')['Switch']
+    ATable: typeof import('ant-design-vue/es')['Table']
     ATextarea: typeof import('ant-design-vue/es')['Textarea']
     ContentWrapper: typeof import('./src/components/contentWrapper/index.vue')['default']
     Icon: typeof import('./src/components/Icon/index.vue')['default']

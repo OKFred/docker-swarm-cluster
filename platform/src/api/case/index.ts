@@ -1,4 +1,4 @@
-import axiosPlus from "@/api/index";
+import axiosPlus, { type NewRequest } from "@/api/index";
 /**
  * 获取健康度
  * @returns {Promise<Object>} 返回健康度数据
@@ -46,9 +46,26 @@ export async function getCase(id: any) {
     url: `/api/case/get/{id}`,
     path: { id },
   });
-  if (!Array.isArray(response.data)) throw new Error("not ok");
+  if (!response.data) throw new Error("not ok");
   return response.data;
 }
+
+/**
+ * 获取 case 列表
+ * @returns {Promise<Object>} 返回 case 列表
+ * @throws {Error} 如果返回结果不 ok
+ */
+export const getCaseList = async (
+  data: NewRequest<"/api/case/list", "post">["data"],
+) => {
+  const response = await axiosPlus({
+    method: "post",
+    url: `/api/case/list`,
+    data,
+  });
+  if (response.data.ok === false) throw new Error("not ok");
+  return response.data.data;
+};
 
 /**
  * 更新 case（回调）
