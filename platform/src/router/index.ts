@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 const modules = import.meta.glob("@/pages/**/index.vue");
 const routes: Array<RouteRecordRaw> = [];
+const _routes = [] as routesLike[];
 export type routesLike = {
   path: string;
   name?: string;
@@ -13,28 +14,22 @@ export type routesLike = {
   component: () => Promise<unknown>;
 };
 
-const _routes = [] as routesLike[];
 function getRoutes() {
   for (const path in modules) {
     const routePath = path
-      .replace("/src", "")
-      .replace("/pages", "")
+      .replace("/src/pages", "")
       .replace("/index.vue", "")
       .toLowerCase();
-    const routeName = routePath
-      .split("/")
-      .filter(Boolean)
-      .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
-      .join("");
     const pathArr = routePath.split("/");
     const level = pathArr.length - 1;
+    const name = pathArr[pathArr.length - 1];
     const parent = pathArr
       .filter((o) => o !== "/")
       .slice(0, -1)
       .join("/");
     _routes.push({
       path: routePath || "/",
-      name: routeName || "Index",
+      name,
       level,
       parent,
       component: modules[path],
@@ -59,7 +54,6 @@ function makeRouter() {
     const result = makeChildren(route, _routes);
     if (!result) routes.push(route);
   }
-  console.log({ routes });
 }
 makeRouter();
 

@@ -1,3 +1,4 @@
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faQuestionCircle,
   faUser,
@@ -22,4 +23,14 @@ const iconMap = {
   "fas:cog": faCog,
 };
 export { iconMap };
-export type iconMapLike = typeof iconMap;
+library.add(
+  faQuestionCircle,
+  faUser,
+  faHome,
+  faHeart,
+  faGithub,
+  faEnvelope,
+  faCalendar,
+  faThLarge,
+  faCog,
+);
