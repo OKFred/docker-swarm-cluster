@@ -1,19 +1,16 @@
-import axios from "axios";
-
-const SERVER_URL = "http://localhost:3000"; // 服务器地址
-
+import axiosPlus from "@/api/index";
 /**
  * 获取健康度
  * @returns {Promise<Object>} 返回健康度数据
  */
 export async function getHealth() {
-  const response = await axios.get(`${SERVER_URL}`);
+  const response = await axiosPlus({ method: "get", url: `/` });
   if (response.data.ok === false) throw new Error("not ok");
-  return response.data.data;
+  return response.data.ok;
 }
 
 export async function getSystemInfo() {
-  const response = await axios.get(`${SERVER_URL}/api/system/info`);
+  const response = await axiosPlus({ method: "get", url: `/api/system/info` });
   if (response.data.ok === false) throw new Error("not ok");
   return response.data.data;
 }
@@ -29,7 +26,11 @@ export async function addCase(newCase: {
   caseTimeout: number;
   returnTime: number;
 }) {
-  const response = await axios.post(`${SERVER_URL}/api/case/add`, newCase);
+  const response = await axiosPlus({
+    url: `/api/case/add`,
+    method: "post",
+    data: newCase,
+  });
   if (response.data.ok === false) throw new Error("not ok");
   return response.data.data;
 }
@@ -40,9 +41,13 @@ export async function addCase(newCase: {
  * @returns {Promise<Object>} 返回 case 详情
  */
 export async function getCase(id: any) {
-  const response = await axios.get(`${SERVER_URL}/api/case/get/${id}`);
-  if (response.data.ok === false) throw new Error("not ok");
-  return response.data.data;
+  const response = await axiosPlus({
+    method: "get",
+    url: `/api/case/get/{id}`,
+    path: { id },
+  });
+  if (!Array.isArray(response.data)) throw new Error("not ok");
+  return response.data;
 }
 
 /**
@@ -55,12 +60,14 @@ export async function updateCase(
   id: any,
   callbackBody: { caseToken: any; caseSucceed: boolean },
 ) {
-  const response = await axios.post(
-    `${SERVER_URL}/api/case/update/${id}`,
-    callbackBody,
-  );
+  const response = await axiosPlus({
+    url: `/api/case/update/{id}`,
+    method: "post",
+    data: callbackBody,
+    path: { id },
+  });
   if (response.data.ok === false) throw new Error("not ok");
-  return response.data.data;
+  return response.data.ok;
 }
 
 /**
@@ -69,7 +76,11 @@ export async function updateCase(
  * @returns {Promise<Object>} 返回删除结果
  */
 export async function deleteCase(id: any) {
-  const response = await axios.delete(`${SERVER_URL}/api/case/delete/${id}`);
+  const response = await axiosPlus({
+    url: `/api/case/delete/{id}`,
+    method: "delete",
+    path: { id },
+  });
   if (response.data.ok === false) throw new Error("not ok");
-  return response.data.data;
+  return response.data.ok;
 }
