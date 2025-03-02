@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
-type localeLike = "zh-CN" | "en-US";
+export type localeLike = "zh-CN" | "en-US";
 
 async function i18nLoad(locale: localeLike) {
   const loadZhCN = async () =>

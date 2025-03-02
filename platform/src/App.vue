@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { reactive, watch } from "vue";
-import { useLocaleStore } from "@/stores/locale";
+import { useLocaleStore, type localeLike } from "@/stores/locale";
 import { useThemeStore } from "@/stores/theme";
 import { useLoadingStore } from "@/stores/loading";
 import { useMenuStore } from "@/stores/menu";
@@ -58,6 +58,13 @@ watch(
   },
   {
     immediate: true,
+  },
+);
+
+watch(
+  () => localeStore.$state.locale,
+  (val) => {
+    settings.locale = val as localeLike;
   },
 );
 </script>
