@@ -1,13 +1,9 @@
 <template>
-  <div>
-    <header>
-      <TheHeader />
-      <TheMenu />
-      <!-- Add your header content here -->
-    </header>
-    <main>
-      <TheContent />
-    </main>
+  <div class="the-layout">
+    <TheHeader />
+    <TheMenu />
+    <!-- Add your header content here -->
+    <TheContent />
     <footer>
       <!-- Add your footer content here -->
     </footer>
@@ -27,4 +23,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

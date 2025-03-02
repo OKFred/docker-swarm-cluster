@@ -1,5 +1,5 @@
 <template>
-  <header
+  <div
     :class="`the-header ${TheHeader.data.theme === 'dark' ? 'the-header-dark' : ''}`"
   >
     <div class="my-far-table">
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-  </header>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -92,8 +92,13 @@ watch(
 
 <style scoped lang="scss">
 .the-header {
+  z-index: 1;
+  width: 100%;
   height: 88px;
   background-color: rgba(255, 255, 255, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 .the-header-dark {
   color: #fff;

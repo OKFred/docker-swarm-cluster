@@ -42,10 +42,12 @@ watch(
 
 <style scoped lang="scss">
 .the-max-width {
+  margin-top: calc(88px + 24px);
   margin-left: 0;
   width: calc(100% - 0px);
 }
 .the-collapsed-width {
+  margin-top: calc(88px + 24px);
   margin-left: 256px;
   width: calc(100% - 256px);
 }
