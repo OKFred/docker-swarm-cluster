@@ -1,38 +1,30 @@
 <template>
   <div>
     <header>
+      <TheHeader />
       <TheMenu />
       <!-- Add your header content here -->
     </header>
     <main>
-      <router-view></router-view>
+      <TheContent />
     </main>
     <footer>
-      <Button type="primary" @click="changeLang()">Primary Button</Button>
-      <Button type="primary" @click="changeTheme()">Primary Button</Button>
       <!-- Add your footer content here -->
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from "ant-design-vue";
-import { useLocaleStore } from "@/stores/locale.ts";
-import { useThemeStore } from "@/stores/theme.ts";
+import { useLoadingStore } from "@/stores/loading";
 import TheMenu from "./components/TheMenu.vue";
-const localeStore = useLocaleStore();
-const themeStore = useThemeStore();
-function changeLang() {
-  console.log("changeLang");
-  localeStore.changeLang();
-}
+import TheHeader from "./components/TheHeader.vue";
+import TheContent from "./components/TheContent.vue";
+import { onMounted } from "vue";
 
-function changeTheme() {
-  console.log("changeTheme");
-  themeStore.changeTheme();
-}
+const loadingStore = useLoadingStore();
+onMounted(() => {
+  loadingStore.setLoading(false);
+});
 </script>
 
-<style scoped>
-/* Add your styles here */
-</style>
+<style scoped></style>

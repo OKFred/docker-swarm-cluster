@@ -1,88 +1,118 @@
 <template>
-  <div>
-    <a-switch :checked="state.mode === 'vertical'" @change="changeMode" />
-    Change Mode
-    <span class="ant-divider" style="margin: 0 1em" />
-    <a-switch :checked="state.theme === 'dark'" @change="changeTheme" />
-    Change Theme
-    <br />
-    <br />
+  <div class="the-menu-wrapper">
     <a-menu
-      v-model:openKeys="state.openKeys"
-      v-model:selectedKeys="state.selectedKeys"
-      style="width: 256px"
-      :mode="state.mode"
-      :items="items"
-      :theme="state.theme"
-    ></a-menu>
+      v-show="!TheMenu.data.menuShow"
+      :class="`the-menu ${TheMenu.data.collapsed ? 'the-menu-clapsed' : ''}`"
+      v-model:openKeys="TheMenu.data.openKeys"
+      v-model:selectedKeys="TheMenu.data.selectedKeys"
+      :mode="TheMenu.data.mode"
+      :items="TheMenu.data.menuItems"
+      :theme="TheMenu.data.theme"
+      @select="onSelect"
+    >
+    </a-menu>
   </div>
 </template>
+
 <script lang="ts" setup>
-import { h, reactive, watch } from "vue";
-import {
-  MailOutlined,
-  CalendarOutlined,
-  AppstoreOutlined,
-  SettingOutlined,
-} from "@ant-design/icons-vue";
+import { h, reactive, watch, onMounted } from "vue";
 import type { MenuMode, MenuTheme } from "ant-design-vue";
 import type { ItemType } from "ant-design-vue";
+import { useMenuStore } from "@/stores/menu";
 import { useThemeStore } from "@/stores/theme";
+import router, { routes } from "@/router";
+import Icon from "@/components/Icon/index.vue";
+const metaModules = import.meta.glob("@/pages/**/meta.ts");
 const themeStore = useThemeStore();
-
+const menuStore = useMenuStore();
+const TheMenu = reactive({
+  data: {
+    mode: "inline" as MenuMode,
+    theme: themeStore.getTheme() as MenuTheme,
+    selectedKeys: [],
+    openKeys: [],
+    menuItems: [] as ItemType[],
+    collapsed: false,
+    menuShow: false,
+  },
+  fn: {
+    onSelect,
+  },
+});
 watch(
   () => themeStore.getTheme(),
   (theme) => {
-    state.theme = theme as MenuTheme;
+    TheMenu.data.theme = theme as MenuTheme;
   },
 );
-const state = reactive({
-  mode: "inline" as MenuMode,
-  theme: themeStore.getTheme() as MenuTheme,
-  selectedKeys: ["1"],
-  openKeys: ["sub1"],
-});
+watch(
+  () => menuStore.getToolbar(),
+  (collapsed) => {
+    TheMenu.data.collapsed = collapsed;
+    const timeout = collapsed ? 200 : 0;
+    setTimeout(() => {
+      TheMenu.data.menuShow = collapsed;
+    }, timeout);
+  },
+);
 
-function getItem(
-  label: string,
-  key: string,
-  icon?: any,
-  children?: ItemType[],
-  type?: "group",
-): ItemType {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  } as ItemType;
+async function getMetas() {
+  const metaArr: any[] = [];
+  for (const metaModule in metaModules) {
+    const meta = await metaModules[metaModule]().then(
+      (res: any) => res.default,
+    );
+    const path = metaModule.replace("/src/pages", "").replace("/meta.ts", "");
+    metaArr.push({ path, meta: { ...meta } });
+  }
+  return metaArr;
 }
 
-const items: ItemType[] = reactive([
-  getItem("Navigation One", "1", h(MailOutlined)),
-  getItem("Navigation Two", "2", h(CalendarOutlined)),
-  getItem("Navigation Two", "sub1", h(AppstoreOutlined), [
-    getItem("Option 3", "3"),
-    getItem("Option 4", "4"),
-    getItem("Submenu", "sub1-2", null, [
-      getItem("Option 5", "5"),
-      getItem("Option 6", "6"),
-    ]),
-  ]),
-  getItem("Navigation Three", "sub2", h(SettingOutlined), [
-    getItem("Option 7", "7"),
-    getItem("Option 8", "8"),
-    getItem("Option 9", "9"),
-    getItem("Option 10", "10"),
-  ]),
-]);
+async function generateMenuItems(routes: any[]) {
+  const items: ItemType[] = [];
+  /*   const metaArr = */ await getMetas();
+  for (const route of routes) {
+    const children = route.children
+      ? await generateMenuItems(route.children)
+      : undefined;
+    // const metaObj = metaArr.find((item) => item.path === route.path);
+    // const meta = metaObj?.meta;
+    // const icon = meta?.icon;
+    const newIcon = /*  icon && */ h(Icon, { name: "fas:carrot" });
+    const thisItem = {
+      key: route.path,
+      label: route.meta?.title || route.name,
+      icon: newIcon,
+      children,
+      type: route.children ? "group" : undefined,
+    };
+    items.push(thisItem as ItemType);
+  }
+  return items;
+}
 
-const changeMode = (checked: boolean) => {
-  state.mode = checked ? "vertical" : "inline";
-};
+onMounted(async () => {
+  const items = await generateMenuItems(routes);
+  TheMenu.data.menuItems.push(...items);
+});
 
-const changeTheme = () => {
-  themeStore.changeTheme();
-};
+function onSelect({ key }: { key: string }) {
+  router.push(key);
+}
 </script>
+
+<style lang="scss" scoped>
+.the-menu-wrapper {
+  .the-menu {
+    position: fixed;
+    top: 88px;
+    left: 0;
+    width: 256px;
+    height: calc(100vh - 88px);
+    transition: width 0.3s;
+  }
+  .the-menu-clapsed {
+    width: 0;
+  }
+}
+</style>

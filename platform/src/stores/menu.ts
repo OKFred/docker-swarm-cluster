@@ -4,6 +4,9 @@ import type { routesLike } from "@/router";
 export const useMenuStore = defineStore("menu", {
   state: () => ({
     menu: [] as routesLike[],
+    toolbar: {
+      collapsed: false,
+    },
   }),
   actions: {
     initMenu(routes: routesLike[]) {
@@ -25,6 +28,12 @@ export const useMenuStore = defineStore("menu", {
     },
     setMenu(menu: routesLike[]) {
       this.menu = menu;
+    },
+    toggleToolbar() {
+      this.toolbar.collapsed = !this.toolbar.collapsed;
+    },
+    getToolbar() {
+      return this.toolbar.collapsed;
     },
   },
 });
