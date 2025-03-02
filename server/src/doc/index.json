@@ -27,6 +27,59 @@
                 }
             }
         },
+        "/api/system/info": {
+            "get": {
+                "summary": "System information",
+                "responses": {
+                    "200": {
+                        "description": "System information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ok": { "type": "boolean" },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "node": { "type": "string" },
+                                                "platform": { "type": "string" },
+                                                "arch": { "type": "string" },
+                                                "cpus": { "type": "integer" },
+                                                "memory": { "type": "integer" },
+                                                "uptime": { "type": "integer" },
+                                                "loadavg": { "type": "array" },
+                                                "totalmem": { "type": "integer" },
+                                                "freemem": { "type": "integer" },
+                                                "hostname": { "type": "string" },
+                                                "type": { "type": "string" },
+                                                "release": { "type": "string" },
+                                                "networkInterfaces": { "type": "object" }
+                                            },
+                                            "required": [
+                                                "node",
+                                                "platform",
+                                                "arch",
+                                                "cpus",
+                                                "memory",
+                                                "uptime",
+                                                "loadavg",
+                                                "totalmem",
+                                                "freemem",
+                                                "hostname",
+                                                "type",
+                                                "release",
+                                                "networkInterfaces"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/case/add": {
             "post": {
                 "summary": "Add a new case",

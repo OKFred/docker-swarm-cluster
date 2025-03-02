@@ -11,6 +11,7 @@ import { createOrUpdateService } from "./docker/index.js";
 import { sendFeishuMessage } from "./rpc/feishu/instance.js";
 import Dockerode from "dockerode";
 import dotenv from "dotenv";
+import os from "os";
 dotenv.config();
 
 process.env.SERVER_URL ??
@@ -21,7 +22,10 @@ process.env.CASE_IMAGE_NAME ??
 
 const app = new Hono();
 app.use(logger());
-
+app.onError((e, c) => {
+    console.error(e);
+    return c.json({ ok: false, message: e.message });
+});
 // 添加 case 接口
 app.post("/api/case/add", async (c) => {
     try {
@@ -197,6 +201,25 @@ app.get("/doc", async (c) => {
     } catch (e) {
         return c.json({ ok: false, message: "Failed to read doc/index.html" });
     }
+});
+
+app.get("/api/system/info", async (c) => {
+    const data = {
+        node: os.hostname(),
+        platform: os.platform(),
+        arch: os.arch(),
+        cpus: os.cpus().length,
+        memory: os.totalmem(),
+        uptime: os.uptime(),
+        loadavg: os.loadavg(),
+        totalmem: os.totalmem(),
+        freemem: os.freemem(),
+        hostname: os.hostname(),
+        type: os.type(),
+        release: os.release(),
+        networkInterfaces: os.networkInterfaces(),
+    };
+    return c.json({ ok: true, data });
 });
 
 // 健康检查接口
