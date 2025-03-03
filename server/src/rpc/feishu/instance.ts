@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 //调用飞书webhook，系统事件上报
 
 // 发送文本消息
