@@ -1,4 +1,4 @@
-import type { App } from "@/types/app.ts";
+import type { App } from "../../types/app.ts";
 import { serve } from "@hono/node-server";
 
 export default function nodeServer(app: App) {

@@ -1,5 +1,5 @@
-import type { App } from "@/types/app.ts";
-import { sendFeishuMessage } from "@/rpc/feishu/instance.js";
+import type { App } from "../../types/app.ts";
+import { sendFeishuMessage } from "../../rpc/feishu/instance.js";
 export default function corsHandler(app: App) {
     app.onError((e, c) => {
         console.error(e);

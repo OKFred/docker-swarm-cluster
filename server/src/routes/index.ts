@@ -1,14 +1,14 @@
 import fs from "fs";
 import path from "path";
 import { and, eq, asc, desc } from "drizzle-orm";
-import { db } from "@/db/index.js";
-import { myCaseTable } from "@/db/schema.js";
-import type { myCaseLike, myCaseInsertLike } from "@/db/schema.js";
-import { createOrUpdateService } from "@/docker/index.js";
+import { db } from "../db/index.js";
+import { myCaseTable } from "../db/schema.js";
+import type { myCaseLike, myCaseInsertLike } from "../db/schema.js";
+import { createOrUpdateService } from "../docker/index.js";
 import Dockerode from "dockerode";
 import dotenv from "dotenv";
 import os from "os";
-import { App } from "@/types/app.js";
+import { App } from "../types/app.js";
 dotenv.config();
 
 process.env.SERVER_URL ??
