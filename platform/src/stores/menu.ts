@@ -1,32 +1,29 @@
 import { defineStore } from "pinia";
 import type { routesLike } from "@/router";
+import type { RouteRecordRaw } from "vue-router";
 
 export const useMenuStore = defineStore("menu", {
   state: () => ({
-    menu: [] as routesLike[],
+    menu: [] as RouteRecordRaw[],
     toolbar: {
       collapsed: false,
     },
   }),
   actions: {
-    initMenu(routes: routesLike[]) {
+    initMenu(routes: RouteRecordRaw[] | routesLike[]) {
       this.menu = routes.map((item) => {
         return {
-          path: item.path,
-          name: item.name,
-          level: item.level,
-          parent: item.parent,
+          ...item,
           key: item.name,
           title: item.name,
           icon: "fas:question",
-          component: item.component,
         };
       });
     },
     getMenu() {
       return this.menu;
     },
-    setMenu(menu: routesLike[]) {
+    setMenu(menu: RouteRecordRaw[]) {
       this.menu = menu;
     },
     toggleToolbar() {
