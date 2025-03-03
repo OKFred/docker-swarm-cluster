@@ -70,15 +70,15 @@ async function getMetas() {
 
 async function generateMenuItems(routes: any[]) {
   const items: ItemType[] = [];
-  /*   const metaArr = */ await getMetas();
+  const metaArr = await getMetas();
   for (const route of routes) {
     const children = route.children
       ? await generateMenuItems(route.children)
       : undefined;
-    // const metaObj = metaArr.find((item) => item.path === route.path);
-    // const meta = metaObj?.meta;
-    // const icon = meta?.icon;
-    const newIcon = /*  icon && */ h(Icon, { name: "fas:carrot" });
+    const metaObj = metaArr.find((item) => item.path === route.path);
+    const meta = metaObj?.meta;
+    let icon = meta?.icon;
+    const newIcon = icon && h(Icon, { name: icon });
     const thisItem = {
       key: route.path,
       label: route.meta?.title || route.name,
