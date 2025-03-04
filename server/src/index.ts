@@ -9,6 +9,7 @@ import corsHandler from "./middlewares/cors/index.js";
 // import basicAuthHandler from "./middlewares/auth/basic";
 import logger from "./middlewares/logger/index.js";
 import nodeServer from "./middlewares/nodeServer/index.js";
+import routeRegister from "./routes/index.js";
 function createApp() {
     const app = new OpenAPIHono<AppBindings>();
     // loggerRegister(app);
@@ -21,6 +22,7 @@ function createApp() {
     // docRegister(app);
     // normalRouter(app);
     nodeServer(app);
+    routeRegister(app);
     return app;
 }
 
