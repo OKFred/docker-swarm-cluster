@@ -45,11 +45,18 @@ const TheTable = reactive({
         title: "Case Timeout",
         dataIndex: "caseTimeout",
         key: "caseTimeout",
+        //time in ms
+        customRender: (obj) => {
+          return obj.value ? (obj.value / 1000).toFixed(2) + "s" : "0.00s";
+        },
       },
       {
         title: "Return Time",
         dataIndex: "returnTime",
         key: "returnTime",
+        customRender: (obj) => {
+          return obj.value ? (obj.value / 1000).toFixed(2) + "s" : "0.00s";
+        },
       },
       {
         title: "Case Succeed",
@@ -73,16 +80,32 @@ const TheTable = reactive({
         title: "Create Time",
         dataIndex: "createTime",
         key: "createTime",
+        //time UTC
+        customRender: (obj) => {
+          return obj.value
+            ? dayjs(obj.value).format("YYYY-MM-DD HH:mm:ss")
+            : "";
+        },
       },
       {
         title: "Update Time",
         dataIndex: "updateTime",
         key: "updateTime",
+        customRender: (obj) => {
+          return obj.value
+            ? dayjs(obj.value).format("YYYY-MM-DD HH:mm:ss")
+            : "";
+        },
       },
       {
         title: "Expected Time",
         dataIndex: "expectedTime",
         key: "expectedTime",
+        customRender: (obj) => {
+          return obj.value
+            ? dayjs(obj.value).format("YYYY-MM-DD HH:mm:ss")
+            : "";
+        },
       },
       {
         title: "Service ID",
