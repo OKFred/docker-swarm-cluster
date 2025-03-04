@@ -39,14 +39,15 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
   if (mode === "development") {
     if (env.SERVER_URL|| env.VITE_SERVER_URL) {
       result.server.proxy = {
-        ["/api"]: {
+        "/api": {
           target: env.SERVER_URL || env.VITE_SERVER_URL,
           ws: false,
           changeOrigin: true,
-          rewrite: (path: string) => path.replace(new RegExp(`^/api`), ""),
+          // rewrite: (path: string) => path.replace(new RegExp(`^/api`), ""),
         },
       };
     }
   }
+  console.log(result.server)
   return result;
 });
