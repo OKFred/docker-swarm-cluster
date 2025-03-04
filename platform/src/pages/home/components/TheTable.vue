@@ -106,6 +106,9 @@ const TheTable = reactive({
     }[],
     caseList: [] as caseListLike,
   },
+  fn: {
+    loadData,
+  },
 });
 
 onMounted(() => {
@@ -123,6 +126,7 @@ async function loadData() {
     pageSize: 10,
   }).then((res) => {
     if (!res) return;
+    TheTable.data.caseList = [];
     TheTable.data.caseList.push(...res);
   });
 }

@@ -5,10 +5,10 @@
     <br />
     <TheHeader :localObj="localObj" />
     <br />
+    <TheFilter :localObj="localObj" />
     <br />
     <TheTable :localObj="localObj" />
     <br />
-    <TheForm :localObj="localObj" />
   </div>
 </template>
 
@@ -17,7 +17,7 @@ import t from "@/locales";
 import { reactive, onMounted } from "vue";
 import TheHeader from "./components/TheHeader.vue";
 import TheTable from "./components/TheTable.vue";
-import TheForm from "./components/TheForm.vue";
+import TheFilter from "./components/TheFilter.vue";
 import dayjs from "dayjs";
 export type localObjLike = typeof localObj;
 const localObj = reactive({

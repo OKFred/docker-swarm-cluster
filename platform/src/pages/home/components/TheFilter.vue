@@ -1,5 +1,10 @@
-<template>
-  <a-form :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol">
+<template><!-- 
+  <a-form
+    :model="formState"
+    :label-col="labelCol"
+    :wrapper-col="wrapperCol"
+    v-if="false"
+  >
     <a-form-item label="Activity name">
       <a-input v-model:value="formState.name" />
     </a-form-item>
@@ -26,7 +31,10 @@
       <a-button type="primary" @click="onSubmit">Create</a-button>
       <a-button style="margin-left: 10px">Cancel</a-button>
     </a-form-item>
-  </a-form>
+  </a-form> -->
+  <div class="on-the-right">
+    <a-button type="primary" @click="props.localObj.TheTable?.fn.loadData()">Query</a-button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -41,7 +49,7 @@ const props = defineProps({
   },
 }) as { localObj: localObjLike };
 
-const TheForm = reactive({
+const TheFilter = reactive({
   data: {},
   fn: {},
 });
@@ -52,7 +60,7 @@ onMounted(() => {
 });
 
 function mixin() {
-  Object.assign(props.localObj, { TheForm });
+  Object.assign(props.localObj, { TheFilter });
 }
 
 async function loadData() {}
@@ -78,4 +86,9 @@ const labelCol = { style: { width: "150px" } };
 const wrapperCol = { span: 14 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.on-the-right {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>
