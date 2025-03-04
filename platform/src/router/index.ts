@@ -35,6 +35,10 @@ function getRoutes() {
       component: modules[path],
     });
   }
+  //包含首页（取第一个）
+  const firstRoute = { ..._routes[0] };
+  firstRoute.path = "/";
+  _routes.push(firstRoute);
 }
 
 function makeChildren(routerObj: routesLike, childrenArr: any[]) {
@@ -57,7 +61,6 @@ function makeRouter() {
   }
 }
 makeRouter();
-
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
