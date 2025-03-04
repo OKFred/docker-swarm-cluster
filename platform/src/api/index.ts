@@ -50,7 +50,7 @@ type AxiosPlus = <U extends keyof paths, M extends Lowercase<Method>>(
 
 /** @description  axios 实例 */
 const service = axios.create({
-  baseURL: "http://localhost:3000",
+/*   baseURL: "http://localhost:3000", */
   timeout: 10_000,
 });
 
