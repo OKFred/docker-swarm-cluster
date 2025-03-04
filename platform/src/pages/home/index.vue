@@ -126,11 +126,19 @@ const localObj = reactive({
         title: "Case Succeed",
         dataIndex: "caseSucceed",
         key: "caseSucceed",
+        //boolean
+        customRender: (text: boolean) => {
+          return text ? "Yes" : "No";
+        },
       },
       {
         title: "Case Finished",
         dataIndex: "caseFinished",
         key: "caseFinished",
+        //boolean
+        customRender: (text: boolean) => {
+          return text ? "Yes" : "No";
+        },
       },
       {
         title: "Create Time",

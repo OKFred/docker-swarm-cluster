@@ -11,7 +11,6 @@ const pathSrc = path.resolve(__dirname, "src");
 // https://vite.dev/config/
 export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
   let env = {} as any;
-  console.log({ command, mode });
   if (command === "build") {
     const { SERVER_URL } = process.env;
     env = { SERVER_URL };
