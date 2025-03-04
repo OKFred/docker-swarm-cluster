@@ -127,8 +127,8 @@ const localObj = reactive({
         dataIndex: "caseSucceed",
         key: "caseSucceed",
         //boolean
-        customRender: (text: boolean) => {
-          return text ? "Yes" : "No";
+        customRender: (obj) => {
+          return obj.value ? "Yes" : "No";
         },
       },
       {
@@ -136,8 +136,8 @@ const localObj = reactive({
         dataIndex: "caseFinished",
         key: "caseFinished",
         //boolean
-        customRender: (text: boolean) => {
-          return text ? "Yes" : "No";
+        customRender: (obj) => {
+          return obj.value ? "Yes" : "No";
         },
       },
       {
