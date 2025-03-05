@@ -38,7 +38,8 @@ function getRoutes() {
   //包含首页（取第一个）
   const firstRoute = { ..._routes[0] };
   firstRoute.path = "/";
-  _routes.push(firstRoute);
+  firstRoute.name = "";
+  _routes.unshift(firstRoute);
 }
 
 function makeChildren(routerObj: routesLike, childrenArr: any[]) {
@@ -56,8 +57,12 @@ function makeChildren(routerObj: routesLike, childrenArr: any[]) {
 function makeRouter() {
   getRoutes();
   for (const route of _routes) {
-    const result = makeChildren(route, _routes);
-    if (!result) routes.push(route);
+    if (route.path === "/") {
+      routes.push(route);
+    } else {
+      const result = makeChildren(route, _routes);
+      if (!result) routes.push(route);
+    }
   }
 }
 makeRouter();

@@ -72,6 +72,7 @@ async function generateMenuItems(routes: any[]) {
   const items: ItemType[] = [];
   const metaArr = await getMetas();
   for (const route of routes) {
+    if (route.path === '/') continue;
     const children = route.children
       ? await generateMenuItems(route.children)
       : undefined;
