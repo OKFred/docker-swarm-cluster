@@ -1,7 +1,5 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
-import dotenv from "dotenv";
-dotenv.config();
 
 const dbFile = process.env.DB_FILE_NAME || ":memory:";
 const client = createClient({ url: dbFile });

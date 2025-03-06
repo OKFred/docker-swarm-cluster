@@ -3,14 +3,12 @@ import path from "path";
 import { and, eq, asc, desc } from "drizzle-orm";
 import { db } from "@/db/index";
 
-import { myCaseTable } from "../db/schema";
-import type { myCaseLike, myCaseInsertLike } from "../db/schema";
-import { createOrUpdateService } from "../docker/index";
+import { myCaseTable } from "@/db/schema";
+import type { myCaseLike, myCaseInsertLike } from "@/db/schema";
+import { createOrUpdateService } from "@/docker/index";
 import Dockerode from "dockerode";
-// import dotenv from "dotenv";
 import os from "os";
-import { App } from "../types/app";
-// dotenv.config();
+import { App } from "@/types/app";
 
 process.env.SERVER_URL ??
     (console.error("env SERVER_URL is not set") !== void 0 || process.exit(1));
