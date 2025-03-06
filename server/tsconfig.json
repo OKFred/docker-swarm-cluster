@@ -15,5 +15,9 @@
         "paths": {
             "@/*": ["./src/*"]
         }
+    },
+    "tsc-alias": {
+        "verbose": true,
+        "resolveFullPaths": true
     }
 }
