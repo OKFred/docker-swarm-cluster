@@ -1,13 +1,9 @@
-import fs from "fs";
-import path from "path";
 import { and, eq, asc, desc } from "drizzle-orm";
 import { db } from "@/db/index";
-
 import { myCaseTable } from "@/db/schema";
 import type { myCaseLike, myCaseInsertLike } from "@/db/schema";
 import { createOrUpdateService } from "@/docker/index";
 import Dockerode from "dockerode";
-import os from "os";
 import { App } from "@/types/app";
 
 process.env.SERVER_URL ??
@@ -17,8 +13,8 @@ process.env.CASE_IMAGE_NAME ??
     (console.error("env CASE_IMAGE_NAME is not set") !== void 0 || process.exit(1));
 
 function main(app: App) {
-    // 添加 case 接口
-    app.post("/api/case/add", async (c) => {
+    // 添加 case 接口·
+    app.post("/case/add", async (c) => {
         try {
             let { caseName, caseToken, caseTimeout, returnTime, serviceOptions, terminateTimeout } =
                 await c.req.json();
@@ -76,7 +72,7 @@ function main(app: App) {
     });
 
     // 列表 case 接口
-    app.post("/api/case/list", async (c) => {
+    app.post("/case/list", async (c) => {
         try {
             const {
                 orderBy = "id",
@@ -108,7 +104,7 @@ function main(app: App) {
     });
 
     // 获取 case 详情接口（用于运行 case）
-    app.get("/api/case/get/:id", async (c) => {
+    app.get("/case/get/:id", async (c) => {
         try {
             const id = Number(c.req.param("id"));
             const rows = await db.select().from(myCaseTable).where(eq(myCaseTable.id, id)).limit(1);
@@ -123,7 +119,7 @@ function main(app: App) {
     });
 
     // 更新 case 接口（回调）
-    app.post("/api/case/update/:id", async (c) => {
+    app.post("/case/update/:id", async (c) => {
         try {
             const id = Number(c.req.param("id"));
             const { expectedTime, caseToken, caseSucceed } = await c.req.json();
@@ -161,7 +157,7 @@ function main(app: App) {
     });
 
     // 删除 case 接口
-    app.delete("/api/case/delete/:id", async (c) => {
+    app.delete("/case/delete/:id", async (c) => {
         try {
             const id = Number(c.req.param("id"));
             await db.delete(myCaseTable).where(eq(myCaseTable.id, id));
@@ -171,50 +167,6 @@ function main(app: App) {
             return c.json({ ok: false, message: err.message });
         }
     });
-
-    // 返回 OpenAPI 文档 doc.json
-    app.get("/doc.json", async (c) => {
-        const docPath = path.join(process.cwd(), "src", "doc", "index.json");
-        try {
-            const docContent = fs.readFileSync(docPath, "utf-8");
-            return c.body(docContent, 200, { "Content-Type": "application/json" });
-        } catch (e) {
-            return c.json({ ok: false, message: "Failed to read doc.json" });
-        }
-    });
-
-    // 返回 Swagger UI 页面
-    app.get("/doc", async (c) => {
-        const docHtmlPath = path.join(process.cwd(), "src", "doc", "index.html");
-        try {
-            const htmlContent = fs.readFileSync(docHtmlPath, "utf-8");
-            return c.body(htmlContent, 200, { "Content-Type": "text/html" });
-        } catch (e) {
-            return c.json({ ok: false, message: "Failed to read doc/index.html" });
-        }
-    });
-
-    app.get("/api/system/info", async (c) => {
-        const data = {
-            node: os.hostname(),
-            platform: os.platform(),
-            arch: os.arch(),
-            cpus: os.cpus().length,
-            memory: os.totalmem(),
-            uptime: os.uptime(),
-            loadavg: os.loadavg(),
-            totalmem: os.totalmem(),
-            freemem: os.freemem(),
-            hostname: os.hostname(),
-            type: os.type(),
-            release: os.release(),
-            networkInterfaces: os.networkInterfaces(),
-        };
-        return c.json({ ok: true, data });
-    });
-
-    // 健康检查接口
-    app.get("/", (c) => c.json({ ok: true, message: new Date().toLocaleString() }));
 }
 
 export default main;

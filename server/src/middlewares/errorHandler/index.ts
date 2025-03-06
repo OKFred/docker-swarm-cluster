@@ -15,7 +15,8 @@ process.on("uncaughtException", function (err) {
     sendFeishuMessage("uncaughtException:" + err);
 });
 
-sendFeishuMessage("服务器已启动").then(async (res) => {
-    const result = await res?.json();
-    console.log(result);
-});
+process.env.NODE_ENV === "production" &&
+    sendFeishuMessage("服务器已启动").then(async (res) => {
+        const result = await res?.json();
+        console.log(result);
+    });
