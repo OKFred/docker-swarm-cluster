@@ -1,15 +1,16 @@
 {
     "compilerOptions": {
         "esModuleInterop": true,
-        "module": "NodeNext",
+        "module": "ESNext",
         "target": "ESNext",
-        "moduleResolution": "nodenext",
+        "moduleResolution": "bundler",
         "outDir": "./dist",
         "rootDir": "./src",
         "strict": true,
         "skipLibCheck": true,
+        "noUncheckedSideEffectImports": true,
         "resolveJsonModule": true,
-        "lib": ["ES2020", "DOM"],
+        "lib": ["ESNext", "DOM"],
         "baseUrl": ".",
         "paths": {
             "@/*": ["./src/*"]
