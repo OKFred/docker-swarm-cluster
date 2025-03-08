@@ -67,7 +67,7 @@ export default [
     rules: {
       "vue/multi-word-component-names": "off",
       "no-unused-vars": [
-        "error",
+        "warn",
         {
           ignoreRestSiblings: true,
           caughtErrors: "none",
