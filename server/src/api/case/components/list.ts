@@ -6,7 +6,7 @@ import { App } from "@/types/app";
 
 function main(app: App) {
     // 列表 case 接口
-    app.post("/case/list", async (c) => {
+    app.post("/list", async (c) => {
         try {
             const {
                 orderBy = "id",

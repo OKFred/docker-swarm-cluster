@@ -6,7 +6,7 @@ import { App } from "@/types/app";
 
 function main(app: App) {
     // 更新 case 接口（回调）
-    app.post("/case/update/:id", async (c) => {
+    app.post("/update/:id", async (c) => {
         try {
             const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
             const { expectedTime, caseToken, caseSucceed } = await c.req.json();

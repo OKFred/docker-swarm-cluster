@@ -14,7 +14,7 @@ process.env.CASE_IMAGE_NAME ??
 
 function main(app: App) {
     // 添加 case 接口·
-    app.post("/case/add", async (c) => {
+    app.post("/add", async (c) => {
         try {
             let { caseName, caseToken, caseTimeout, returnTime, serviceOptions, terminateTimeout } =
                 await c.req.json();

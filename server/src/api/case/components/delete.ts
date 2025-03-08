@@ -6,7 +6,7 @@ import { App } from "@/types/app";
 
 function main(app: App) {
     // 删除 case 接口
-    app.delete("/case/delete/:id", async (c) => {
+    app.delete("/delete/:id", async (c) => {
         try {
             const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
             await db.delete(myCaseTable).where(eq(myCaseTable.id, id));

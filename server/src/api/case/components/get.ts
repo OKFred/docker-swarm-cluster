@@ -6,7 +6,7 @@ import { App } from "@/types/app";
 
 function main(app: App) {
     // 获取 case 详情接口（用于运行 case）
-    app.get("/case/get/:id", async (c) => {
+    app.get("/get/:id", async (c) => {
         try {
             const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
             const rows = await db.select().from(myCaseTable).where(eq(myCaseTable.id, id)).limit(1);
