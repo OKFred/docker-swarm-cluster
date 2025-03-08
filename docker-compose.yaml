@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   server: #提供接口，读写任务数据库，生成集群任务
     image: registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-server
@@ -46,4 +45,4 @@ services:
       - my_network
 networks:
   my_network:
-    driver: bridge  # 使用 bridge 网络，保证容器互通
+    driver: overlay
