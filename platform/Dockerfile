@@ -28,7 +28,7 @@ COPY --from=build-stage /app/dist /html
 COPY docker_nginx.conf /etc/nginx/nginx.conf
 
 # 暴露端口
-EXPOSE 3000
+EXPOSE 80
 
 # 启动 Nginx 服务
 CMD ["nginx", "-g", "daemon off;"]
