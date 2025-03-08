@@ -1,20 +1,8 @@
 import fs from "fs";
 import path from "path";
-import os from "os";
 import { App } from "@/types/app";
 
 function main(app: App) {
-    // 返回 OpenAPI 文档 doc.json
-    app.get("/doc.json", async (c) => {
-        const docPath = path.join(process.cwd(), "src", "doc", "index.json");
-        try {
-            const docContent = fs.readFileSync(docPath, "utf-8");
-            return c.body(docContent, 200, { "Content-Type": "application/json" });
-        } catch (e) {
-            return c.json({ ok: false, message: "Failed to read doc.json" });
-        }
-    });
-
     // 返回 Swagger UI 页面
     app.get("/doc", async (c) => {
         const docHtmlPath = path.join(process.cwd(), "src", "doc", "index.html");
@@ -24,6 +12,23 @@ function main(app: App) {
         } catch (e) {
             return c.json({ ok: false, message: "Failed to read doc/index.html" });
         }
+    });
+    app.doc31("/doc.json", {
+        openapi: "3.1.0",
+        info: {
+            version: "1.0.0",
+            title: "My API",
+        },
+        security: [
+            {
+                bearerAuth: [],
+            },
+        ],
+    });
+    app.openAPIRegistry.registerComponent("securitySchemes", "bearerAuth", {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
     });
 }
 
