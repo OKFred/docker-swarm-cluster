@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { addCase, getCase, updateCase, deleteCase } from "./api/index.js";
+import { addCase, getCase, updateCase, deleteCase } from "./api/case/index.js";
 dotenv.config();
 
 async function runCase() {
@@ -13,7 +13,7 @@ async function runCase() {
     const id = Number(CASE_ID);
     try {
         // 调用 get 接口获取 case 详情
-        const details = await getCase(id);
+        const details = await getCase({ path: { id }, query: { caseToken: CASE_TOKEN } });
         console.log("Case details:", details);
         const { expectedTime, maxRetry, tryCount } = details;
         if (tryCount >= maxRetry) {
@@ -36,7 +36,10 @@ async function runCase() {
         // 模拟等待 returnTime 后发起回调
         await new Promise((resolve) => setTimeout(resolve, details.returnTime));
         // 发起回调
-        const callbackResult = await updateCase(id, callbackBody);
+        const callbackResult = await updateCase({
+            path: { id },
+            data: callbackBody,
+        });
         console.log("Callback response:", callbackResult);
 
         // 调用删除 case 接口（如有需要）
