@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { addCase, getCase, updateCase, deleteCase } from "./api/index.js";
+import { addCase, getCase, updateCase, deleteCase } from "./api/case/index.js";
 dotenv.config();
 
 async function initCase() {
@@ -16,12 +16,12 @@ async function initCase() {
         };
 
         // 调用 server 添加 case 接口
-        const id = await addCase(newCase);
+        const id = await addCase({ data: newCase });
         console.log("Created case with ID:", id);
 
         // 调用 get 接口获取 case 详情
-        const details = await getCase(id);
-        // console.log("Case details:", details);
+        const details = await getCase({ path: { id }, query: { caseToken: CASE_TOKEN } });
+        console.log("Case details:", details);
 
         // 模拟等待 returnTime
         await new Promise((resolve) => setTimeout(resolve, details.returnTime));
@@ -38,7 +38,7 @@ function runLoop() {
 }
 
 function updateTimeout() {
-    demoTimeout = Math.floor(Math.random() * 500);
+    demoTimeout = Math.floor(Math.random() * 3000);
     console.log("Running next case in ", Number(demoTimeout / 1000).toFixed(2), "s");
 }
 
