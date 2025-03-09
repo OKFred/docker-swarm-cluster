@@ -1,4 +1,5 @@
-<template><!-- 
+<template>
+  <!-- 
   <a-form
     :model="formState"
     :label-col="labelCol"
@@ -33,14 +34,15 @@
     </a-form-item>
   </a-form> -->
   <div class="on-the-right">
-    <a-button type="primary" @click="props.localObj.TheTable?.fn.loadData()">Query</a-button>
+    <a-button type="primary" @click="props.localObj.TheTable?.fn.loadData()"
+      >Query</a-button
+    >
   </div>
 </template>
 
 <script setup lang="ts">
-import t from "@/locales";
 import { reactive, onMounted } from "vue";
-import dayjs from "dayjs";
+import type { localObjLike } from "../index.vue";
 
 const props = defineProps({
   localObj: {
@@ -49,6 +51,7 @@ const props = defineProps({
   },
 }) as { localObj: localObjLike };
 
+export type TheFilterLike = typeof TheFilter;
 const TheFilter = reactive({
   data: {},
   fn: {},
@@ -64,26 +67,6 @@ function mixin() {
 }
 
 async function loadData() {}
-
-interface FormState {
-  name: string;
-  delivery: boolean;
-  type: string[];
-  resource: string;
-  desc: string;
-}
-const formState: UnwrapRef<FormState> = reactive({
-  name: "",
-  delivery: false,
-  type: [],
-  resource: "",
-  desc: "",
-});
-const onSubmit = () => {
-  console.log("submit!", toRaw(formState));
-};
-const labelCol = { style: { width: "150px" } };
-const wrapperCol = { span: 14 };
 </script>
 
 <style scoped lang="scss">

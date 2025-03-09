@@ -441,22 +441,19 @@ export interface components {
         systemInfoRes: {
             ok: boolean;
             data: {
-                ok?: boolean;
-                data?: {
-                    node: string;
-                    platform: string;
-                    arch: string;
-                    cpus: number;
-                    memory: number;
-                    uptime: number;
-                    loadavg: unknown[];
-                    totalmem: number;
-                    freemem: number;
-                    hostname: string;
-                    type: string;
-                    release: string;
-                    networkInterfaces: Record<string, never>;
-                };
+                node: string;
+                platform: string;
+                arch: string;
+                cpus: number;
+                memory: number;
+                uptime: number;
+                loadavg: unknown[];
+                totalmem: number;
+                freemem: number;
+                hostname: string;
+                type: string;
+                release: string;
+                networkInterfaces: Record<string, never>;
             };
         };
     };

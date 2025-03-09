@@ -12,9 +12,9 @@
 import { getCaseList } from "@/api/case";
 import { onMounted, reactive } from "vue";
 import dayjs from "dayjs";
-import type { localObjLike } from "./index.vue";
+import type { localObjLike } from "../index.vue";
 
-type caseListLike = Exclude<Awaited<ReturnType<typeof getCaseList>>, undefined>;
+type caseListLike = Awaited<ReturnType<typeof getCaseList>>["data"]["list"];
 
 const props = defineProps({
   localObj: {
@@ -23,6 +23,7 @@ const props = defineProps({
   },
 }) as { localObj: localObjLike };
 
+export type TheTableLike = typeof TheTable;
 const TheTable = reactive({
   data: {
     columns: [
@@ -46,7 +47,7 @@ const TheTable = reactive({
         dataIndex: "caseTimeout",
         key: "caseTimeout",
         //time in ms
-        customRender: (obj) => {
+        customRender: (obj: { value: number; }) => {
           return obj.value ? (obj.value / 1000).toFixed(2) + "s" : "0.00s";
         },
       },
@@ -54,7 +55,7 @@ const TheTable = reactive({
         title: "Return Time",
         dataIndex: "returnTime",
         key: "returnTime",
-        customRender: (obj) => {
+        customRender: (obj: { value: number; }) => {
           return obj.value ? (obj.value / 1000).toFixed(2) + "s" : "0.00s";
         },
       },
@@ -63,7 +64,7 @@ const TheTable = reactive({
         dataIndex: "caseSucceed",
         key: "caseSucceed",
         //boolean
-        customRender: (obj) => {
+        customRender: (obj: { value: any; }) => {
           return obj.value ? "Yes" : "No";
         },
       },
@@ -72,7 +73,7 @@ const TheTable = reactive({
         dataIndex: "caseFinished",
         key: "caseFinished",
         //boolean
-        customRender: (obj) => {
+        customRender: (obj: { value: any; }) => {
           return obj.value ? "Yes" : "No";
         },
       },
@@ -81,7 +82,7 @@ const TheTable = reactive({
         dataIndex: "createTime",
         key: "createTime",
         //time UTC
-        customRender: (obj) => {
+        customRender: (obj: { value: string | number | Date | dayjs.Dayjs | null | undefined; }) => {
           return obj.value
             ? dayjs(obj.value).format("YYYY-MM-DD HH:mm:ss")
             : "";
@@ -91,7 +92,7 @@ const TheTable = reactive({
         title: "Update Time",
         dataIndex: "updateTime",
         key: "updateTime",
-        customRender: (obj) => {
+        customRender: (obj: { value: string | number | Date | dayjs.Dayjs | null | undefined; }) => {
           return obj.value
             ? dayjs(obj.value).format("YYYY-MM-DD HH:mm:ss")
             : "";
@@ -101,7 +102,7 @@ const TheTable = reactive({
         title: "Expected Time",
         dataIndex: "expectedTime",
         key: "expectedTime",
-        customRender: (obj) => {
+        customRender: (obj: { value: string | number | Date | dayjs.Dayjs | null | undefined; }) => {
           return obj.value
             ? dayjs(obj.value).format("YYYY-MM-DD HH:mm:ss")
             : "";
@@ -145,12 +146,14 @@ function mixin() {
 
 async function loadData() {
   getCaseList({
-    pageNo: 1,
-    pageSize: 10,
+    data: {
+      pageNo: 1,
+      pageSize: 10,
+    },
   }).then((res) => {
     if (!res) return;
-    TheTable.data.caseList = [];
-    TheTable.data.caseList.push(...res);
+    let { list } = res.data;
+    TheTable.data.caseList = [...list];
   });
 }
 </script>

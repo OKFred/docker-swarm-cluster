@@ -1,13 +1,5 @@
 import axiosPlus, { type AxiosConfig } from "@/api/index";
 
-export async function getSystemInfo() {
-  const response = await axiosPlus<"/api/system/info", "get">({
-    method: "get",
-    url: `/api/system/info`,
-  });
-  return response.data;
-}
-
 export async function addCase(
   axiosConfig: Omit<AxiosConfig<"/api/case/add", "post">, "url" | "method">,
 ) {

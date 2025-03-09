@@ -32,17 +32,16 @@
 </template>
 
 <script setup lang="ts">
-import t from "@/locales";
-import { getSystemInfo } from "@/api/case";
 import { onMounted, reactive } from "vue";
-import type { UnwrapRef } from "vue";
-import dayjs from "dayjs";
-import type { localObjLike } from "./index.vue";
+import type { localObjLike } from "../index.vue";
 
-type systemInfoLike = Awaited<ReturnType<typeof getSystemInfo>>;
+import { getSystemInfo } from "@/api/system/index";
+export type TheHeaderLike = typeof TheHeader;
 const TheHeader = reactive({
   data: {
-    systemInfo: null as systemInfoLike | null,
+    systemInfo: null as
+      | Awaited<ReturnType<typeof getSystemInfo>>["data"]
+      | null,
   },
 });
 
@@ -64,7 +63,7 @@ function mixin() {
 
 async function loadData() {
   const res = await getSystemInfo();
-  TheHeader.data.systemInfo = res;
+  TheHeader.data.systemInfo = res.data;
 }
 </script>
 
