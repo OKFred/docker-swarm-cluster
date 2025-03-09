@@ -1,18 +1,6 @@
 import { App } from "@/types/app";
-import { caseAddReq, caseAddRes } from "../schema";
+import { componentArr } from "../schema/index";
 
-const componentArr = [
-    {
-        type: "schema",
-        name: "caseAddReq",
-        component: caseAddReq,
-    },
-    {
-        type: "schema",
-        name: "caseAddRes",
-        component: caseAddRes,
-    },
-];
 function main(app: App) {
     componentArr.forEach((component) => {
         app.openAPIRegistry.registerComponent(
