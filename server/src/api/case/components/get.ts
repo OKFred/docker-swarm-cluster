@@ -4,7 +4,7 @@ import { myCaseTable } from "@/db/schema";
 import type { myCaseLike, myCaseAddLike } from "@/db/schema";
 import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
-import { caseGetReq, caseIndex } from "../schema";
+import { caseGetReq, caseGetReqLike, caseGetResLike, caseIndex } from "../schema";
 import { schemaToParam } from "@/api/register";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";
@@ -45,19 +45,24 @@ const pathObj = {
 // 获取 case 详情接口（用于运行 case）
 
 const handler = async (c: NodeHonoContext) => {
-    try {
-        const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
-        const bodyObj = await c.req.json();
-        const { valid, errors } = validate(bodyObj, caseGetReq as object, "2020-12");
+    const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
+    const bodyObj = (await c.req.json()) satisfies caseGetReqLike;
+    const { valid, errors } = validate(bodyObj, caseGetReq as object, "2020-12");
     if (!valid) throw new HTTPException(422, { cause: errors });
-        const rows = await db.select().from(myCaseTable).where(eq(myCaseTable.id, id)).limit(1);
-        if (rows.length === 0) {
-            return c.json({ ok: false, message: "Case not found" });
-        }
-        return c.json({ ok: true, data: rows[0] });
-    } catch (err) {
-        const message = err instanceof Error ? err.message : "Unknown error";
-        return c.json({ ok: false, message });
+    const rows = await db
+        .select()
+        .from(myCaseTable)
+        .where(
+            and(
+                eq(myCaseTable.id, id),
+                eq(myCaseTable.caseToken, bodyObj.caseToken),
+                bodyObj.caseName ? eq(myCaseTable.caseName, bodyObj.caseName) : undefined,
+            ),
+        )
+        .limit(1);
+    if (rows.length === 0) {
+        return c.json({ ok: false, message: "Case not found" }, 404);
     }
+    return c.json({ ok: true, data: rows[0] } satisfies caseGetResLike, 200);
 };
 export default { pathObj, handler };

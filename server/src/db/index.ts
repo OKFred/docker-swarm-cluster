@@ -15,7 +15,7 @@ async function tableInit() {
             return_time INTEGER NOT NULL,
             case_succeed BOOLEAN NOT NULL DEFAULT 0,
             case_finished BOOLEAN NOT NULL DEFAULT 0,
-            create_time TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+            create_time TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
             update_time TEXT,
             expected_time TEXT,
             service_id TEXT,

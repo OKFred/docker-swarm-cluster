@@ -79,7 +79,7 @@ export const caseAddRes = {
 export const caseGetReq = {
     type: "object",
     properties: { ...myCaseReadable },
-    required: ["id"],
+    required: ["caseToken"],
     additionalProperties: false,
 } as const satisfies JSONSchema;
 
@@ -89,7 +89,7 @@ export const caseGetRes = {
         ok: { type: "boolean" },
         data: {
             type: "object",
-            properties: myCase,
+            properties: { ...myCase },
             additionalProperties: false,
         },
         message: { type: "string" },
@@ -166,6 +166,7 @@ export const caseDeleteReq = {
     properties: {
         ...myCaseDeletable,
     },
+    required: ["caseToken"],
     additionalProperties: false,
 } as const satisfies JSONSchema;
 

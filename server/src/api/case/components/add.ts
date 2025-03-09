@@ -4,9 +4,9 @@ import { myCaseTable } from "@/db/schema";
 import type { myCaseAddLike } from "@/db/schema";
 import { createOrUpdateService } from "@/docker/index";
 import Dockerode from "dockerode";
-import { NodeHonoContext, RawRouteConfig, Mutable } from "@/types/app";
+import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
-import { caseAddReq, caseAddReqLike } from "../schema";
+import { caseAddReq, caseAddReqLike, caseAddResLike } from "../schema";
 import { HTTPException } from "hono/http-exception";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 
@@ -48,7 +48,7 @@ const pathObj = {
 } satisfies RawRouteConfig;
 
 const handler = async (c: NodeHonoContext) => {
-    const bodyObj = await c.req.json(); /*  as caseAddReqLike */
+    const bodyObj = await c.req.json(); /*  satisfies caseAddReqLike */ //TODO： TS -> JSON Schema
     const { valid, errors } = validate(bodyObj, caseAddReq as object, "2020-12");
     if (!valid) throw new HTTPException(422, { cause: errors });
     let { caseName, caseToken, caseTimeout, returnTime, serviceOptions, terminateTimeout } =
@@ -97,6 +97,6 @@ const handler = async (c: NodeHonoContext) => {
     terminateTimeout ?? (terminateTimeout = 60_000); //设置60秒后自动清理服务（演示用）
     const serviceId = await createOrUpdateService(serviceOptions, terminateTimeout);
     await db.update(myCaseTable).set({ serviceId }).where(eq(myCaseTable.id, id));
-    return c.json({ ok: true, data: id }, 200);
+    return c.json({ ok: true, data: id } satisfies caseAddResLike, 200);
 };
 export default { pathObj, handler };

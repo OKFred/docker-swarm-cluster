@@ -30,18 +30,23 @@ export const myCase = {
     },
     updateTime: {
         type: "string",
+        nullable: true,
     },
     expectedTime: {
         type: "string",
+        nullable: true,
     },
     serviceId: {
         type: "string",
+        nullable: true,
     },
     retryCount: {
         type: "number",
+        nullable: true,
     },
     maxRetry: {
         type: "number",
+        nullable: true,
     },
 } as const satisfies Record<keyof myCaseLike, JSONSchema>;
 
@@ -95,7 +100,9 @@ export const myCaseTable = sqliteTable("my_case", {
     returnTime: integer("return_time").notNull(),
     caseSucceed: integer("case_succeed", { mode: "boolean" }).notNull().default(false),
     caseFinished: integer("case_finished", { mode: "boolean" }).notNull().default(false),
-    createTime: text("create_time").default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
+    createTime: text("create_time")
+        .notNull()
+        .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
     updateTime: text("update_time"),
     expectedTime: text("expected_time"),
     serviceId: text("service_id"),
