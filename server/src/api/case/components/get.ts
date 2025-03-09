@@ -10,6 +10,7 @@ import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";
 
 const pathParameters = schemaToParam(caseIndex, "path");
+const queryParameters = schemaToParam({ $ref: "#/components/schemas/caseGetReq" }, "query");
 
 const pathObj = {
     path: "/get/{id}",
@@ -17,16 +18,7 @@ const pathObj = {
     description: "查询 case",
     summary: "查询 case",
     tags: ["case"],
-    parameters: [...pathParameters],
-    requestBody: {
-        content: {
-            "application/json": {
-                schema: {
-                    $ref: "#/components/schemas/caseGetReq",
-                },
-            },
-        },
-    },
+    parameters: [...pathParameters, ...queryParameters],
     responses: {
         200: {
             description: "成功",

@@ -5,7 +5,7 @@ import getCase from "./components/get";
 import listCase from "./components/list";
 import updateCase from "./components/update";
 import deleteCase from "./components/delete";
-import registerPath from "@/api/registerPath";
+import registerPath from "@/api/register";
 import { componentArr } from "./components/index";
 
 function createApp() {
