@@ -1,7 +1,7 @@
 import { and, eq, asc, desc } from "drizzle-orm";
 import { db } from "@/db/index";
 import { myCaseTable } from "@/db/schema";
-import type { myCaseInsertLike } from "@/db/schema";
+import type { myCaseAddLike } from "@/db/schema";
 import { createOrUpdateService } from "@/docker/index";
 import Dockerode from "dockerode";
 import { NodeHonoContext, RawRouteConfig, Mutable } from "@/types/app";
@@ -61,7 +61,7 @@ const handler = async (c: NodeHonoContext) => {
                 caseTimeout,
                 returnTime,
                 expectedTime,
-            } satisfies myCaseInsertLike)
+            } satisfies myCaseAddLike)
             .run();
         const id = Number(resultAdd.lastInsertRowid);
         setTimeout(async () => {

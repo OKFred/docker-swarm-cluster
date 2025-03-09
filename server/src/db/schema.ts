@@ -1,6 +1,91 @@
 import { sql } from "drizzle-orm";
 import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
+import { JSONSchema } from "json-schema-to-ts";
+
+export const myCase = {
+    id: {
+        type: "number",
+    },
+    caseName: {
+        type: "string",
+    },
+    caseToken: {
+        type: "string",
+    },
+    caseTimeout: {
+        type: "number",
+    },
+    returnTime: {
+        type: "number",
+    },
+    caseSucceed: {
+        type: "boolean",
+    },
+    caseFinished: {
+        type: "boolean",
+    },
+    createTime: {
+        type: "string",
+    },
+    updateTime: {
+        type: "string",
+    },
+    expectedTime: {
+        type: "string",
+    },
+    serviceId: {
+        type: "string",
+    },
+    retryCount: {
+        type: "number",
+    },
+    maxRetry: {
+        type: "number",
+    },
+} as const satisfies Record<keyof myCaseLike, JSONSchema>;
+
+export const myCaseAddable = {
+    caseName: {
+        type: "string",
+    },
+    caseToken: {
+        type: "string",
+    },
+    caseTimeout: {
+        type: "number",
+    },
+    returnTime: {
+        type: "number",
+    },
+} as const satisfies Partial<Record<keyof myCaseAddLike, JSONSchema>>;
+
+export const myCaseReadable = {
+    caseName: {
+        type: "string",
+    },
+    caseToken: {
+        type: "string",
+    },
+} as const satisfies Partial<Record<keyof myCaseLike, JSONSchema>>;
+
+export const myCaseUpdatable = {
+    expectedTime: {
+        type: "string",
+    },
+    caseToken: {
+        type: "string",
+    },
+    caseSucceed: {
+        type: "boolean",
+    },
+} as const satisfies Partial<Record<keyof myCaseLike, JSONSchema>>;
+
+export const myCaseDeletable = {
+    caseToken: {
+        type: "string",
+    },
+} as const satisfies Partial<Record<keyof myCaseLike, JSONSchema>>;
 
 export const myCaseTable = sqliteTable("my_case", {
     id: integer("id").primaryKey().notNull(),
@@ -19,4 +104,4 @@ export const myCaseTable = sqliteTable("my_case", {
 });
 
 export type myCaseLike = InferSelectModel<typeof myCaseTable>;
-export type myCaseInsertLike = InferInsertModel<typeof myCaseTable>;
+export type myCaseAddLike = InferInsertModel<typeof myCaseTable>;

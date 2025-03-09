@@ -1,7 +1,7 @@
 import { and, eq, asc, desc } from "drizzle-orm";
 import { db } from "@/db/index";
 import { myCaseTable } from "@/db/schema";
-import type { myCaseLike, myCaseInsertLike } from "@/db/schema";
+import type { myCaseLike, myCaseAddLike } from "@/db/schema";
 import { App } from "@/types/app";
 
 function main(app: App) {
