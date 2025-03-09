@@ -9,17 +9,6 @@ import {
 } from "@/db/schema";
 import Dockerode from "dockerode";
 
-const oneOf = [
-    {
-        properties: { ok: { const: true } },
-        required: ["data"],
-    },
-    {
-        properties: { ok: { const: false } },
-        required: ["message"],
-    },
-] as const;
-
 export const caseIndex = {
     type: "object",
     properties: {
@@ -71,8 +60,7 @@ export const caseAddRes = {
         data: { ...caseIndex["properties"]["id"] },
         message: { type: "string" },
     },
-    required: ["ok"],
-    oneOf,
+    required: ["ok", "data"],
     additionalProperties: false,
 } as const satisfies JSONSchema;
 
@@ -94,8 +82,7 @@ export const caseGetRes = {
         },
         message: { type: "string" },
     },
-    required: ["ok"],
-    oneOf,
+    required: ["ok", "data"],
     additionalProperties: false,
 } as const satisfies JSONSchema;
 
@@ -135,8 +122,7 @@ export const caseListRes = {
         },
         message: { type: "string" },
     },
-    required: ["ok"],
-    oneOf,
+    required: ["ok", "data"],
     additionalProperties: false,
 } as const satisfies JSONSchema;
 
@@ -156,8 +142,7 @@ export const caseUpdateRes = {
         data: { ...caseIndex["properties"]["id"] },
         message: { type: "string" },
     },
-    required: ["ok"],
-    oneOf,
+    required: ["ok", "data"],
     additionalProperties: false,
 } as const satisfies JSONSchema;
 
@@ -177,8 +162,7 @@ export const caseDeleteRes = {
         data: { ...caseIndex["properties"]["id"] },
         message: { type: "string" },
     },
-    required: ["ok"],
-    oneOf,
+    required: ["ok", "data"],
     additionalProperties: false,
 } as const satisfies JSONSchema;
 

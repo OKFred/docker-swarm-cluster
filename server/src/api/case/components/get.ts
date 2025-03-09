@@ -4,8 +4,8 @@ import { myCaseTable } from "@/db/schema";
 import type { myCaseLike, myCaseAddLike } from "@/db/schema";
 import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
-import { caseGetReq, caseGetReqLike, caseGetResLike, caseIndex } from "../schema";
-import { schemaToParam } from "@/api/register";
+import { caseGetReq, caseGetReqLike, caseGetResLike, caseIndex } from "./index";
+import schemaToParam from "@/api/schemaToParam";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";
 
@@ -44,7 +44,7 @@ const pathObj = {
 
 // 获取 case 详情接口（用于运行 case）
 
-const handler = async (c: NodeHonoContext) => {
+const controller = async (c: NodeHonoContext) => {
     const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
     const bodyObj = (await c.req.json()) satisfies caseGetReqLike;
     const { valid, errors } = validate(bodyObj, caseGetReq as object, "2020-12");
@@ -65,4 +65,4 @@ const handler = async (c: NodeHonoContext) => {
     }
     return c.json({ ok: true, data: rows[0] } satisfies caseGetResLike, 200);
 };
-export default { pathObj, handler };
+export default { pathObj, controller };

@@ -3,7 +3,7 @@ import { db } from "@/db/index";
 import { myCaseTable } from "@/db/schema";
 import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
-import { caseListReq, caseListReqLike, caseListResLike } from "../schema";
+import { caseListReq, caseListReqLike, caseListResLike } from "./index";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";
 
@@ -38,7 +38,7 @@ const pathObj = {
     },
 } satisfies RawRouteConfig;
 
-const handler = async (c: NodeHonoContext) => {
+const controller = async (c: NodeHonoContext) => {
     const bodyObj = (await c.req.json()) satisfies caseListReqLike;
     const { valid, errors } = validate(bodyObj, caseListReq as object, "2020-12");
     if (!valid) throw new HTTPException(422, { cause: errors });
@@ -54,4 +54,4 @@ const handler = async (c: NodeHonoContext) => {
         .offset(offset);
     return c.json({ ok: true, data: rows } satisfies caseListResLike, 200);
 };
-export default { pathObj, handler };
+export default { pathObj, controller };

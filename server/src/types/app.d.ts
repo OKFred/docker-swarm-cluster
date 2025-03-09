@@ -29,7 +29,7 @@ export type AppBindings = {
 
 export type pathObjLike = RouteConfig & {
     // eslint-disable-next-line no-unused-vars
-    handler: (c: NodeHonoContext) => Promise<Response>;
+    controller: (c: NodeHonoContext) => Promise<Response>;
 };
 
 export type NodeHonoContext = Context<AppBindings> & {

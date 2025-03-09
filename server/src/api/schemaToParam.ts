@@ -1,10 +1,9 @@
-import { App, NodeHonoContext, RawRouteConfig } from "@/types/app";
 import type { ParameterLocation, ParameterObject, SchemaObjectType } from "openapi3-ts/oas31";
 
 /**
  * @description This function is used to convert the schema object to the parameter object
  */
-export function schemaToParam(
+export default function schemaToParam(
     obj: {
         type?: string;
         properties?: {
@@ -35,21 +34,3 @@ export function schemaToParam(
     }
     return arr;
 }
-
-/**
- * @description Register a route to the app
- */
-function main(
-    app: App,
-    pathObj: RawRouteConfig,
-    handler: (c: NodeHonoContext) => Promise<Response>,
-) {
-    const { path, method } = pathObj;
-    const regExp = /\{(\w+)\}/g;
-    const _path = path.replace(regExp, ":$1");
-    app[method](_path, handler);
-    app.openAPIRegistry.registerPath(pathObj);
-    return app;
-}
-
-export default main;

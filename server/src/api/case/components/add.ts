@@ -6,7 +6,7 @@ import { createOrUpdateService } from "@/docker/index";
 import Dockerode from "dockerode";
 import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
-import { caseAddReq, caseAddReqLike, caseAddResLike } from "../schema";
+import { caseAddReq, caseAddReqLike, caseAddResLike } from "./index";
 import { HTTPException } from "hono/http-exception";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 
@@ -47,7 +47,7 @@ const pathObj = {
     },
 } satisfies RawRouteConfig;
 
-const handler = async (c: NodeHonoContext) => {
+const controller = async (c: NodeHonoContext) => {
     const bodyObj = await c.req.json(); /*  satisfies caseAddReqLike */ //TODO： TS -> JSON Schema
     const { valid, errors } = validate(bodyObj, caseAddReq as object, "2020-12");
     if (!valid) throw new HTTPException(422, { cause: errors });
@@ -99,4 +99,4 @@ const handler = async (c: NodeHonoContext) => {
     await db.update(myCaseTable).set({ serviceId }).where(eq(myCaseTable.id, id));
     return c.json({ ok: true, data: id } satisfies caseAddResLike, 200);
 };
-export default { pathObj, handler };
+export default { pathObj, controller };

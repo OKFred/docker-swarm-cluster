@@ -5,8 +5,8 @@ import getCase from "./components/get";
 import listCase from "./components/list";
 import updateCase from "./components/update";
 import deleteCase from "./components/delete";
-import register from "@/api/register";
-import { componentArr } from "../case/schema/index";
+import registerPath from "@/api/registerPath";
+import { componentArr } from "./components/index";
 
 function createApp() {
     const app = new OpenAPIHono<AppBindings>();
@@ -18,8 +18,8 @@ function createApp() {
         );
     });
     const arr = [addCase, getCase, listCase, updateCase, deleteCase];
-    arr.forEach(({ pathObj, handler }) => {
-        register(app, pathObj, handler);
+    arr.forEach(({ pathObj, controller }) => {
+        registerPath(app, pathObj, controller);
     });
     return app;
 }
