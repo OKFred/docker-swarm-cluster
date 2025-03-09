@@ -100,8 +100,8 @@ export const caseListReq = {
             ] satisfies (keyof myCaseLike)[],
         },
         descend: { type: "boolean" },
-        pageNo: { type: "number", minimum: 1 },
-        pageSize: { type: "number", maximum: 1000 },
+        pageNo: { type: "number", minimum: 1, default: 1 },
+        pageSize: { type: "number", maximum: 1000, default: 10 },
         keyword: { type: "string" },
     },
     required: [],
@@ -113,12 +113,24 @@ export const caseListRes = {
     properties: {
         ok: { type: "boolean" },
         data: {
-            type: "array",
-            items: {
-                type: "object",
-                properties: { ...myCase },
-                additionalProperties: false,
+            type: "object",
+            properties: {
+                list: {
+                    type: "array",
+                    items: {
+                        type: "object",
+                        properties: { ...myCase },
+                        additionalProperties: false,
+                    },
+                },
+                total: { type: "number" },
+                currentPage: { type: "number" },
+                totalPage: { type: "number" },
+                pageNo: { type: "number", minimum: 1 },
+                pageSize: { type: "number", maximum: 1000 },
             },
+            required: ["list"],
+            additionalProperties: false,
         },
         message: { type: "string" },
     },

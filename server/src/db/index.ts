@@ -1,9 +1,10 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
+import { myCaseTable } from "./schema";
 
 const dbFile = process.env.DB_FILE_NAME || ":memory:";
 const client = createClient({ url: dbFile });
-const db = drizzle({ client });
+const db = drizzle<{ my_case: typeof myCaseTable }>({ client });
 
 async function tableInit() {
     await db.run(`

@@ -45,13 +45,32 @@ const controller = async (c: NodeHonoContext) => {
     const { orderBy = "id", descend = true, pageNo = 1, pageSize = 10, keyword = "" } = bodyObj;
     const offset = (pageNo - 1) * pageSize;
     const orderField = myCaseTable[orderBy] || myCaseTable.id;
-    const rows = await db
-        .select()
-        .from(myCaseTable)
-        .where(keyword ? eq(myCaseTable.caseName, keyword) : undefined)
-        .orderBy(!descend ? asc(orderField) : desc(orderField))
-        .limit(pageSize)
-        .offset(offset);
-    return c.json({ ok: true, data: rows } satisfies caseListResLike, 200);
+    const maxPageSize = 1000;
+    const finalPageSize = pageSize > maxPageSize ? maxPageSize : pageSize;
+    const queryDB = (getAll?: boolean) =>
+        db
+            .select()
+            .from(myCaseTable)
+            .where(keyword ? eq(myCaseTable.caseName, keyword) : undefined)
+            .orderBy(!descend ? asc(orderField) : desc(orderField))
+            .limit(getAll ? maxPageSize : finalPageSize)
+            .offset(getAll ? 0 : offset);
+    const allRows = await queryDB(true);
+    const rows = allRows.slice(offset, offset + finalPageSize);
+    const total = allRows.length;
+    const totalPage = Math.ceil(total / finalPageSize);
+    return c.json(
+        {
+            ok: true,
+            data: {
+                list: rows,
+                total,
+                totalPage,
+                pageNo,
+                pageSize: finalPageSize,
+            },
+        } satisfies caseListResLike,
+        200,
+    );
 };
 export default { pathObj, controller };
