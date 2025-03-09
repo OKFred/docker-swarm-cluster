@@ -5,6 +5,8 @@ import type { myCaseLike } from "@/db/schema";
 import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
 import { caseIndex, caseListReq, caseListReqLike } from "../schema";
+import { errorSchema } from "@/middleware/errorHandler/schema";
+import { HTTPException } from "hono/http-exception";
 
 const pathObj = {
     path: "/list",
@@ -33,15 +35,16 @@ const pathObj = {
                 },
             },
         },
+        422: errorSchema[422],
     },
 } satisfies RawRouteConfig;
 
 const handler = async (c: NodeHonoContext) => {
     try {
-        const bodyObj = (await c.req.json()) as  caseListReqLike;
-      const { valid, errors } = validate(bodyObj, caseListReq as object, "2020-12");
-      if (!valid) throw new Error("Invalid request body");
-      const { orderBy = "id", descend = true, pageNo = 1, pageSize = 10, keyword = "" } = bodyObj;
+        const bodyObj = (await c.req.json()) as caseListReqLike;
+        const { valid, errors } = validate(bodyObj, caseListReq as object, "2020-12");
+        if (!valid) throw new HTTPException(422, { cause: errors });
+        const { orderBy = "id", descend = true, pageNo = 1, pageSize = 10, keyword = "" } = bodyObj;
         const offset = (pageNo - 1) * pageSize;
         const orderField = myCaseTable[orderBy] || myCaseTable.id;
         const rows = await db

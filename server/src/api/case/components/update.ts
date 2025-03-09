@@ -6,6 +6,8 @@ import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
 import { caseIndex, caseUpdateReq, caseUpdateReqLike } from "../schema";
 import { schemaToParam } from "@/api/register";
+import { errorSchema } from "@/middleware/errorHandler/schema";
+import { HTTPException } from "hono/http-exception";
 
 const pathParameters = schemaToParam(caseIndex, "path");
 
@@ -36,6 +38,7 @@ const pathObj = {
                 },
             },
         },
+        422: errorSchema[422],
     },
 } satisfies RawRouteConfig;
 
@@ -44,7 +47,7 @@ const handler = async (c: NodeHonoContext) => {
         const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
         const bodyObj = (await c.req.json()) as caseUpdateReqLike;
         const { valid, errors } = validate(bodyObj, caseUpdateReq as object, "2020-12");
-        if (!valid) throw new Error("Invalid request body");
+        if (!valid) throw new HTTPException(422, { cause: errors });
         const { expectedTime, caseToken, caseSucceed } = bodyObj;
         const updateTime = new Date().toISOString();
         const rows = await db.select().from(myCaseTable).where(eq(myCaseTable.id, id)).limit(1);

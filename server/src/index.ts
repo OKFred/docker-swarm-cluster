@@ -1,6 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 // import loggerRegister from "@/middlewares/logger";
-import errorHandlerRegister from "@/middleware/errorHandler/index";
+import errorHandler from "@/middleware/errorHandler/index";
 // import pathHandler from "@/middlewares/pathHandler";
 // import normalRouter from "@/routes/normalRouter";
 
@@ -15,7 +15,7 @@ async function createApp() {
     const app = new OpenAPIHono<AppBindings>();
     app.get("/", (c) => c.json({ ok: true, message: new Date().toLocaleString() }));
     // loggerRegister(app);
-    errorHandlerRegister(app);
+    errorHandler(app);
     corsHandler(app);
     logger(app);
     // basicAuthHandler(app);
