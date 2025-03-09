@@ -15,6 +15,8 @@ import {
   faLanguage,
   faSun,
   faMoon,
+  faSearch,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 const iconMap = {
@@ -33,6 +35,8 @@ const iconMap = {
   "fas:language": faLanguage,
   "fas:sun": faSun,
   "fas:moon": faMoon,
+  "fas:search": faSearch,
+  "fas:plus": faPlus,
 };
 export { iconMap };
 library.add(
