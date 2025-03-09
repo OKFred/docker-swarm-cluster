@@ -4,98 +4,6 @@
  */
 
 export interface paths {
-    "/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Health check */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Server status */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            ok?: boolean;
-                            message?: string;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/system/info": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** System information */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description System information */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            ok?: boolean;
-                            data?: {
-                                node: string;
-                                platform: string;
-                                arch: string;
-                                cpus: number;
-                                memory: number;
-                                uptime: number;
-                                loadavg: unknown[];
-                                totalmem: number;
-                                freemem: number;
-                                hostname: string;
-                                type: string;
-                                release: string;
-                                networkInterfaces: Record<string, never>;
-                            };
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/case/add": {
         parameters: {
             query?: never;
@@ -105,7 +13,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Add a new case */
+        /**
+         * 添加 case
+         * @description 添加 case
+         */
         post: {
             parameters: {
                 query?: never;
@@ -113,61 +24,28 @@ export interface paths {
                 path?: never;
                 cookie?: never;
             };
-            /** @description New case details */
-            requestBody: {
+            requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["NewCase"];
+                    "application/json": components["schemas"]["caseAddReq"];
                 };
             };
             responses: {
-                /** @description Case added successfully */
+                /** @description 成功 */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["AddCaseResponse"];
+                        "application/json": components["schemas"]["caseAddRes"];
                     };
                 };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/case/list": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** List cases */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            /** @description Query parameters */
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["ListCaseQuery"];
-                };
-            };
-            responses: {
-                /** @description List of cases */
-                200: {
+                /** @description 校验失败 */
+                422: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["ListCaseResponse"];
+                        "application/json": components["schemas"]["ErrorInvalidRequest"];
                     };
                 };
             };
@@ -185,31 +63,98 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get case details (for running case) */
+        /**
+         * 查询 case
+         * @description 查询 case
+         */
         get: {
             parameters: {
-                query?: never;
+                query: {
+                    query: components["schemas"]["caseGetReq"];
+                };
                 header?: never;
                 path: {
+                    /** @description case id */
                     id: number;
                 };
                 cookie?: never;
             };
             requestBody?: never;
             responses: {
-                /** @description Case details */
+                /** @description 成功 */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["Case"];
+                        "application/json": components["schemas"]["caseGetRes"];
+                    };
+                };
+                /** @description 校验失败 */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorInvalidRequest"];
                     };
                 };
             };
         };
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/case/list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 查询 case列表
+         * @description 查询 case列表
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["caseListReq"];
+                };
+            };
+            responses: {
+                /** @description 成功 */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["caseListRes"];
+                    };
+                };
+                /** @description 校验失败 */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorInvalidRequest"];
+                    };
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
@@ -225,32 +170,42 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Update (callback) case */
+        /**
+         * 更新 case
+         * @description 更新 case
+         */
         post: {
             parameters: {
                 query?: never;
                 header?: never;
                 path: {
+                    /** @description case id */
                     id: number;
                 };
                 cookie?: never;
             };
-            /** @description Updated case details */
-            requestBody: {
+            requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["UpdateCase"];
+                    "application/json": components["schemas"]["caseUpdateReq"];
                 };
             };
             responses: {
-                /** @description Case updated successfully */
+                /** @description 成功 */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": {
-                            ok?: boolean;
-                        };
+                        "application/json": components["schemas"]["caseUpdateRes"];
+                    };
+                };
+                /** @description 校验失败 */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorInvalidRequest"];
                     };
                 };
             };
@@ -271,27 +226,42 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        /** Delete a case */
+        /**
+         * 删除 case
+         * @description 删除 case
+         */
         delete: {
             parameters: {
                 query?: never;
                 header?: never;
                 path: {
+                    /** @description case id */
                     id: number;
                 };
                 cookie?: never;
             };
-            requestBody?: never;
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["caseDeleteReq"];
+                };
+            };
             responses: {
-                /** @description Case deletion response */
+                /** @description 成功 */
                 200: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": {
-                            ok?: boolean;
-                        };
+                        "application/json": components["schemas"]["caseAddRes"];
+                    };
+                };
+                /** @description 校验失败 */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorInvalidRequest"];
                     };
                 };
             };
@@ -301,11 +271,71 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/system/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 获取系统信息
+         * @description 获取系统信息
+         */
+        get: {
+            parameters: {
+                query: {
+                    query: components["schemas"]["systemInfoReq"];
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description 成功 */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["systemInfoRes"];
+                    };
+                };
+                /** @description 未知异常 */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorInvalidRequest"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        NewCase: {
+        ErrorInvalidRequest: {
+            ok: boolean;
+            message: string;
+            errors?: {
+                instanceLocation?: string;
+                keyword?: string;
+                keywordLocation?: string;
+                error?: string;
+            }[];
+        };
+        caseAddReq: {
             caseName: string;
             caseToken: string;
             caseTimeout: number;
@@ -322,40 +352,112 @@ export interface components {
             };
             terminateTimeout?: number;
         };
-        AddCaseResponse: {
+        caseAddRes: {
             ok: boolean;
+            /** @description case id */
             data: number;
+            message?: string;
         };
-        ListCaseQuery: {
+        caseGetReq: {
+            caseName?: string;
+            caseToken: string;
+        };
+        caseGetRes: {
+            ok: boolean;
+            data: {
+                id?: number;
+                caseName?: string;
+                caseToken?: string;
+                caseTimeout?: number;
+                returnTime?: number;
+                caseSucceed?: boolean;
+                caseFinished?: boolean;
+                createTime?: string;
+                updateTime?: string | null;
+                expectedTime?: string | null;
+                serviceId?: string | null;
+                retryCount?: number | null;
+                maxRetry?: number | null;
+            };
+            message?: string;
+        };
+        caseListReq: {
             /** @enum {string} */
-            orderBy?: "id" | "caseName" | "caseToken" | "caseTimeout" | "returnTime" | "caseSucceed" | "caseFinished";
-            asc?: boolean;
-            pageNo?: number;
-            pageSize?: number;
+            orderBy?: "id" | "caseName" | "caseToken" | "caseTimeout" | "returnTime";
+            descend?: boolean;
+            /** @default 1 */
+            pageNo: number;
+            /** @default 10 */
+            pageSize: number;
             keyword?: string;
         };
-        Case: {
-            id?: number;
-            caseName?: string;
-            caseToken?: string;
-            caseTimeout?: number;
-            returnTime?: number;
-            caseSucceed?: boolean;
-            caseFinished?: boolean;
-            createTime?: string;
-            updateTime?: string;
-            expectedTime?: string;
-            serviceId?: number;
-            retryCount?: number;
-            maxRetry?: number;
+        caseListRes: {
+            ok: boolean;
+            data: {
+                list: {
+                    id?: number;
+                    caseName?: string;
+                    caseToken?: string;
+                    caseTimeout?: number;
+                    returnTime?: number;
+                    caseSucceed?: boolean;
+                    caseFinished?: boolean;
+                    createTime?: string;
+                    updateTime?: string | null;
+                    expectedTime?: string | null;
+                    serviceId?: string | null;
+                    retryCount?: number | null;
+                    maxRetry?: number | null;
+                }[];
+                total?: number;
+                currentPage?: number;
+                totalPage?: number;
+                pageNo?: number;
+                pageSize?: number;
+            };
+            message?: string;
         };
-        ListCaseResponse: {
-            ok?: boolean;
-            data?: components["schemas"]["Case"][];
-        };
-        UpdateCase: {
+        caseUpdateReq: {
+            expectedTime: string;
             caseToken: string;
             caseSucceed: boolean;
+        };
+        caseUpdateRes: {
+            ok: boolean;
+            /** @description case id */
+            data: number;
+            message?: string;
+        };
+        caseDeleteReq: {
+            caseToken: string;
+        };
+        caseDeleteRes: {
+            ok: boolean;
+            /** @description case id */
+            data: number;
+            message?: string;
+        };
+        systemInfoReq: Record<string, never>;
+        systemInfoRes: {
+            ok: boolean;
+            data: {
+                ok?: boolean;
+                data?: {
+                    node: string;
+                    platform: string;
+                    arch: string;
+                    cpus: number;
+                    memory: number;
+                    uptime: number;
+                    loadavg: unknown[];
+                    totalmem: number;
+                    freemem: number;
+                    hostname: string;
+                    type: string;
+                    release: string;
+                    networkInterfaces: Record<string, never>;
+                };
+            };
         };
     };
     responses: never;
