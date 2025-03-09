@@ -3,54 +3,67 @@ import type {
   Method,
   AxiosRequestConfig,
   AxiosInstance,
-  AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
 import type { paths } from "@/types/openapi"; //由openapi-typescript自动生成的类型
 import { message } from "ant-design-vue";
 
-export type NewRequest<U extends keyof paths, M extends keyof paths[U]> = {
-  url: U;
+type UrlGeneric<U> = U extends keyof paths ? paths[U] : never;
+
+type SchemaGeneric<U, M> = M extends keyof UrlGeneric<U>
+  ? UrlGeneric<U>[M]
+  : never;
+
+export type RequestGeneric<U, M> = {
+  url: string;
   method: M;
-  headers?: paths[U][M] extends { parameters: { header?: infer H } }
+  headers?: SchemaGeneric<U, M> extends { parameters: { header?: infer H } }
     ? Partial<H>
     : never;
-  path?: paths[U][M] extends { parameters: { path?: infer P } } ? P : never;
-  params?: paths[U][M] extends { parameters: { query?: infer Q } } ? Q : never;
-  data?: paths[U][M] extends {
-    requestBody: { content: { "application/json": infer B } };
+  path?: SchemaGeneric<U, M> extends { parameters: { path?: infer P } }
+    ? P
+    : never;
+  params?: SchemaGeneric<U, M> extends { parameters: { query?: infer Q } }
+    ? Q
+    : never;
+  cookie?: SchemaGeneric<U, M> extends { parameters: { cookie?: infer C } }
+    ? C
+    : never;
+  data?: SchemaGeneric<U, M> extends {
+    requestBody?: { content: { "application/json": infer B } };
   }
     ? B
     : never;
 };
 
-export type NewResponse<U extends keyof paths, M extends keyof paths[U]> = {
-  data: paths[U][M] extends {
+export type ResponseGeneric<U, M> = {
+  data: SchemaGeneric<U, M> extends {
     responses: { 200: { content: { "application/json": infer T } } };
   }
     ? T
     : never;
-  headers: paths[U][M] extends { responses: { 200: { headers: infer H } } }
+  headers: SchemaGeneric<U, M> extends {
+    responses: { 200: { headers: infer H } };
+  }
     ? H
     : never;
 };
 
-type AxiosPlus = <U extends keyof paths, M extends Lowercase<Method>>(
-  axiosConfig: Omit<
-    AxiosRequestConfig,
-    "url" | "method" | "headers" | "path" | "params" | "data"
-  > &
-    NewRequest<U, Extract<M, keyof paths[U]>>,
+export type AxiosConfig<U, M> = Omit<
+  AxiosRequestConfig,
+  "url" | "method" | "headers" | "path" | "params" | "data"
+> &
+  RequestGeneric<U, M>;
+
+export type AxiosPlus = <U extends keyof paths, M extends keyof UrlGeneric<U>>(
+  axiosConfig: RequestGeneric<U, M>,
   // customOptions?: Record<string, unknown>,
   // loadingOptions?: Record<string, unknown>,
-) => Promise<
-  Omit<AxiosResponse, "data" | "headers"> &
-    NewResponse<U, Extract<M, keyof paths[U]>>
->;
+) => Promise<ResponseGeneric<U, M>>;
 
 /** @description  axios 实例 */
 const service = axios.create({
-/*   baseURL: "http://localhost:3000", */
+  /*   baseURL: "http://localhost:3000", */
   timeout: 10_000,
 });
 
@@ -59,8 +72,12 @@ const axiosPlus: AxiosPlus = async (
   /*  customOptions,
   loadingOptions, */
 ) => {
+  const { method, ...rest } = axiosConfig;
   const applyInterceptors = interceptors(service);
-  return await applyInterceptors(axiosConfig);
+  return await applyInterceptors({
+    method: method as Lowercase<Method>,
+    ...rest,
+  });
 };
 
 function interceptors(service: AxiosInstance) {

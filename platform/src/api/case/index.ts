@@ -1,103 +1,71 @@
-import axiosPlus, { type NewRequest } from "@/api/index";
-/**
- * 获取健康度
- * @returns {Promise<Object>} 返回健康度数据
- */
-export async function getHealth() {
-  const response = await axiosPlus({ method: "get", url: `/` });
-  if (response.data.ok === false) throw new Error("not ok");
-  return response.data.ok;
-}
+import axiosPlus, { type AxiosConfig } from "@/api/index";
 
 export async function getSystemInfo() {
-  const response = await axiosPlus({ method: "get", url: `/api/system/info` });
-  if (response.data.ok === false) throw new Error("not ok");
-  return response.data.data;
+  const response = await axiosPlus<"/api/system/info", "get">({
+    method: "get",
+    url: `/api/system/info`,
+  });
+  return response.data;
 }
 
-/**
- * 添加 case
- * @param {Object} newCase 新 case 数据
- * @returns {Promise<number>} 返回新增 case 的 ID
- */
-export async function addCase(newCase: {
-  caseName: string;
-  caseToken: string;
-  caseTimeout: number;
-  returnTime: number;
-}) {
-  const response = await axiosPlus({
+export async function addCase(
+  axiosConfig: Omit<AxiosConfig<"/api/case/add", "post">, "url" | "method">,
+) {
+  const response = await axiosPlus<"/api/case/add", "post">({
     url: `/api/case/add`,
     method: "post",
-    data: newCase,
+    ...axiosConfig,
   });
-  if (response.data.ok === false) throw new Error("not ok");
-  return response.data.data;
+  return response.data;
 }
 
-/**
- * 获取 case 详情
- * @param {number} id case ID
- * @returns {Promise<Object>} 返回 case 详情
- */
-export async function getCase(id: any) {
-  const response = await axiosPlus({
+export async function getCase(
+  axiosConfig: Omit<AxiosConfig<"/api/case/get/{id}", "get">, "url" | "method">,
+) {
+  const response = await axiosPlus<"/api/case/get/{id}", "get">({
     method: "get",
     url: `/api/case/get/{id}`,
-    path: { id },
+    ...axiosConfig,
   });
   if (!response.data) throw new Error("not ok");
   return response.data;
 }
 
-/**
- * 获取 case 列表
- * @returns {Promise<Object>} 返回 case 列表
- * @throws {Error} 如果返回结果不 ok
- */
 export const getCaseList = async (
-  data: NewRequest<"/api/case/list", "post">["data"],
+  axiosConfig: Omit<AxiosConfig<"/api/case/list", "post">, "url" | "method">,
 ) => {
-  const response = await axiosPlus({
+  const response = await axiosPlus<"/api/case/list", "post">({
     method: "post",
     url: `/api/case/list`,
-    data,
+    ...axiosConfig,
   });
-  if (response.data.ok === false) throw new Error("not ok");
-  return response.data.data;
+  return response.data;
 };
 
-/**
- * 更新 case（回调）
- * @param {number} id case ID
- * @param {Object} callbackBody 回调数据
- * @returns {Promise<Object>} 返回更新结果
- */
 export async function updateCase(
-  id: any,
-  callbackBody: { caseToken: any; caseSucceed: boolean },
+  axiosConfig: Omit<
+    AxiosConfig<"/api/case/update/{id}", "post">,
+    "url" | "method"
+  >,
 ) {
-  const response = await axiosPlus({
+  const response = await axiosPlus<"/api/case/update/{id}", "post">({
     url: `/api/case/update/{id}`,
     method: "post",
-    data: callbackBody,
-    path: { id },
+    ...axiosConfig,
   });
-  if (response.data.ok === false) throw new Error("not ok");
   return response.data.ok;
 }
 
-/**
- * 删除 case
- * @param {number} id case ID
- * @returns {Promise<Object>} 返回删除结果
- */
-export async function deleteCase(id: any) {
-  const response = await axiosPlus({
+export async function deleteCase(
+  axiosConfig: Omit<
+    AxiosConfig<"/api/case/delete/{id}", "delete">,
+    "url" | "method"
+  >,
+) {
+  const response = await axiosPlus<"/api/case/delete/{id}", "delete">({
     url: `/api/case/delete/{id}`,
     method: "delete",
-    path: { id },
+    ...axiosConfig,
   });
-  if (response.data.ok === false) throw new Error("not ok");
   return response.data.ok;
 }
