@@ -3,6 +3,8 @@
   <a-table
     :columns="TheTable.data.columns"
     :dataSource="TheTable.data.caseList"
+    :pager="{ pageSize: TheTable.data.pageSize, pageNo: TheTable.data.pageNo }"
+    :total="TheTable.data.total"
     rowKey="id"
     :scroll="{ x: 'max-content' }"
   />
@@ -47,7 +49,7 @@ const TheTable = reactive({
         dataIndex: "caseTimeout",
         key: "caseTimeout",
         //time in ms
-        customRender: (obj: { value: number; }) => {
+        customRender: (obj: { value: number }) => {
           return obj.value ? (obj.value / 1000).toFixed(2) + "s" : "0.00s";
         },
       },
@@ -55,7 +57,7 @@ const TheTable = reactive({
         title: "Return Time",
         dataIndex: "returnTime",
         key: "returnTime",
-        customRender: (obj: { value: number; }) => {
+        customRender: (obj: { value: number }) => {
           return obj.value ? (obj.value / 1000).toFixed(2) + "s" : "0.00s";
         },
       },
@@ -64,7 +66,7 @@ const TheTable = reactive({
         dataIndex: "caseSucceed",
         key: "caseSucceed",
         //boolean
-        customRender: (obj: { value: any; }) => {
+        customRender: (obj: { value: any }) => {
           return obj.value ? "Yes" : "No";
         },
       },
@@ -73,7 +75,7 @@ const TheTable = reactive({
         dataIndex: "caseFinished",
         key: "caseFinished",
         //boolean
-        customRender: (obj: { value: any; }) => {
+        customRender: (obj: { value: any }) => {
           return obj.value ? "Yes" : "No";
         },
       },
@@ -82,7 +84,9 @@ const TheTable = reactive({
         dataIndex: "createTime",
         key: "createTime",
         //time UTC
-        customRender: (obj: { value: string | number | Date | dayjs.Dayjs | null | undefined; }) => {
+        customRender: (obj: {
+          value: string | number | Date | dayjs.Dayjs | null | undefined;
+        }) => {
           return obj.value
             ? dayjs(obj.value).format("YYYY-MM-DD HH:mm:ss")
             : "";
@@ -92,7 +96,9 @@ const TheTable = reactive({
         title: "Update Time",
         dataIndex: "updateTime",
         key: "updateTime",
-        customRender: (obj: { value: string | number | Date | dayjs.Dayjs | null | undefined; }) => {
+        customRender: (obj: {
+          value: string | number | Date | dayjs.Dayjs | null | undefined;
+        }) => {
           return obj.value
             ? dayjs(obj.value).format("YYYY-MM-DD HH:mm:ss")
             : "";
@@ -102,7 +108,9 @@ const TheTable = reactive({
         title: "Expected Time",
         dataIndex: "expectedTime",
         key: "expectedTime",
-        customRender: (obj: { value: string | number | Date | dayjs.Dayjs | null | undefined; }) => {
+        customRender: (obj: {
+          value: string | number | Date | dayjs.Dayjs | null | undefined;
+        }) => {
           return obj.value
             ? dayjs(obj.value).format("YYYY-MM-DD HH:mm:ss")
             : "";
@@ -129,6 +137,9 @@ const TheTable = reactive({
       key: Required<string>;
     }[],
     caseList: [] as caseListLike,
+    pageSize: 10,
+    pageNo: 1,
+    total: 0,
   },
   fn: {
     loadData,
@@ -152,7 +163,10 @@ async function loadData() {
     },
   }).then((res) => {
     if (!res) return;
-    let { list } = res.data;
+    let { list, total, pageSize, pageNo } = res.data;
+    if (pageSize) TheTable.data.pageSize = pageSize;
+    if (pageNo) TheTable.data.pageNo = pageNo;
+    if (total) TheTable.data.total = total;
     TheTable.data.caseList = [...list];
   });
 }

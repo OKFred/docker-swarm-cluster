@@ -115,6 +115,11 @@ function interceptors(service: AxiosInstance) {
       }
     },
     function (error) {
+      if (error.response) {
+        if (error.response.data && error.response.data.message) {
+          message.error(error.response.data.message);
+        }
+      }
       return Promise.reject(error);
     },
   );

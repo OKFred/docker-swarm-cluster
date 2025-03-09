@@ -120,11 +120,13 @@ function onSubmit() {
       }, // 任务自动故障转移
     },
   } */
-  try {
-    finalData.serviceOptions = JSON.parse(finalData.serviceOptions);
-  } catch (error) {
-    message.error("Service Options must be a valid JSON string");
-    return;
+  if (finalData.serviceOptions) {
+    try {
+      finalData.serviceOptions = JSON.parse(finalData.serviceOptions);
+    } catch (error) {
+      message.error("Service Options must be a valid JSON string");
+      return;
+    }
   }
   addCase({ data: finalData }).then(() => {
     props.localObj.TheTable?.fn.loadData();
