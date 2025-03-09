@@ -36,7 +36,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
     ],
   };
   if (mode === "development") {
-    if (env.SERVER_URL|| env.VITE_SERVER_URL) {
+    if (env.SERVER_URL || env.VITE_SERVER_URL) {
       result.server.proxy = {
         "/api": {
           target: env.SERVER_URL || env.VITE_SERVER_URL,
@@ -47,6 +47,6 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
       };
     }
   }
-  console.log(result.server)
+  console.log(result.server);
   return result;
 });
