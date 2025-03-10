@@ -93,7 +93,7 @@ const controller = async (c: NodeHonoContext) => {
             },
         } satisfies Dockerode.ServiceSpec;
     } //详见： https://docs.docker.com/reference/compose-file/deploy/
-    const terminateTimeout = caseTimeout + 15_000; //设置任务到期15秒后自动清理服务
+    const terminateTimeout = caseTimeout + 60_000; //设置任务到期60秒后自动清理服务
     const serviceId = await createOrUpdateService(serviceOptions, terminateTimeout);
     await db.update(myCaseTable).set({ serviceId }).where(eq(myCaseTable.id, id));
     return c.json({ ok: true, data: id } satisfies caseAddResLike, 200);
