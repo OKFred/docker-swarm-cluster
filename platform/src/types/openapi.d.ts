@@ -357,7 +357,6 @@ export interface components {
                 Networks?: unknown[];
                 EndpointSpec?: Record<string, never>;
             };
-            terminateTimeout?: number;
         };
         caseAddRes: {
             ok: boolean;
