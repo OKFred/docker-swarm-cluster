@@ -17,7 +17,7 @@ services:
       - my_network
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  platform: #每隔一段时间，调用server接口，生成任务（模拟用户）
+  platform: #WEB管理页面
     image: registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-platform
     depends_on:
       - server
