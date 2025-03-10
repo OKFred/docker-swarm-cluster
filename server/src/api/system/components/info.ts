@@ -4,8 +4,6 @@ import type { NodeHonoContext, RawRouteConfig } from "@/types/app.d";
 import schemaToParam from "@/api/schemaToParam";
 import { systemInfoResLike } from ".";
 
-const queryParameters = schemaToParam({ $ref: "#/components/schemas/systemInfoReq" }, "query");
-2;
 const controller = async (c: NodeHonoContext) => {
     const data = {
         node: os.hostname(),
@@ -31,7 +29,7 @@ const pathObj = {
     description: "获取系统信息",
     summary: "获取系统信息",
     tags: ["system"],
-    parameters: [...queryParameters],
+    parameters: [],
     responses: {
         200: {
             description: "成功",

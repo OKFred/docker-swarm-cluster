@@ -5,7 +5,6 @@ import type { ParameterLocation, ParameterObject, SchemaObjectType } from "opena
  */
 export default function schemaToParam(
     obj: {
-        $ref?: string;
         type?: string;
         properties?: {
             [key: string]: {
@@ -18,18 +17,8 @@ export default function schemaToParam(
     },
     reqType: ParameterLocation,
 ): ParameterObject[] {
-    const { $ref, properties, required } = obj;
+    const { properties, required } = obj;
     const arr: ParameterObject[] = [];
-    if ($ref) {
-        return [
-            {
-                name: reqType,
-                in: reqType,
-                required: true,
-                schema: { $ref },
-            },
-        ];
-    }
     if (!properties) return [];
     for (const [k, v] of Object.entries(properties)) {
         const isRequired = required && !!required.find((s) => s === k);
