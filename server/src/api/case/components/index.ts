@@ -38,13 +38,11 @@ export const caseAddReq = {
                 EndpointSpec: { type: "object" },
             },
         },
-        terminateTimeout: { type: "number" },
     } satisfies Partial<
         Record<
             | keyof myCaseLike
             | keyof {
                   serviceOptions: Dockerode.ServiceSpec;
-                  terminateTimeout: number;
               },
             JSONSchema
         >
