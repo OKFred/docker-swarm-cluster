@@ -3,8 +3,19 @@
   <a-table
     :columns="TheTable.data.columns"
     :dataSource="TheTable.data.caseList"
-    :pager="{ pageSize: TheTable.data.pageSize, pageNo: TheTable.data.pageNo }"
-    :total="TheTable.data.total"
+    :pagination="{
+      current: TheTable.data.pageNo,
+      pageSize: TheTable.data.pageSize,
+      total: TheTable.data.total,
+      showSizeChanger: true,
+      showQuickJumper: true,
+      showTotal: (total) => `Total ${total} items`,
+      onChange: (pageNo, pageSize) => {
+        TheTable.data.pageNo = pageNo;
+        TheTable.data.pageSize = pageSize;
+        TheTable.fn.loadData();
+      },
+    }"
     rowKey="id"
     :scroll="{ x: 'max-content' }"
   />
@@ -158,8 +169,8 @@ function mixin() {
 async function loadData() {
   getCaseList({
     data: {
-      pageNo: 1,
-      pageSize: 10,
+      pageNo: TheTable.data.pageNo,
+      pageSize: TheTable.data.pageSize,
     },
   }).then((res) => {
     if (!res) return;
