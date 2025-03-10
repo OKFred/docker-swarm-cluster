@@ -1,6 +1,4 @@
-import dotenv from "dotenv";
 import { addCase, getCase, updateCase, deleteCase } from "./api/case/index.js";
-dotenv.config();
 
 async function runCase() {
     // 没有环境变量就随机生成
