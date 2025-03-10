@@ -1,28 +1,32 @@
 <template>
   <a-modal
     v-model:open="TheDialog.data.dialogVisible"
-    title="Add Case"
+    title="添加任务"
     @cancel="onClose"
     @ok="onSubmit"
-    width="50%"
+    width="60%"
   >
     <a-form :form="TheDialog.data.formObj">
-      <a-form-item label="Case Name" name="caseName">
+      <a-form-item label="Case Name" name="caseName" tooltip="任务名称">
         <a-input
           v-model:value="TheDialog.data.formObj.caseName"
           class="case-name"
         />
       </a-form-item>
-      <a-form-item label="Case Token" name="caseToken">
+      <a-form-item label="Case Token" name="caseToken" tooltip="任务令牌">
         <a-input
           v-model:value="TheDialog.data.formObj.caseToken"
           class="case-token"
         />
       </a-form-item>
-      <a-form-item label="Case Timeout" name="caseTimeout">
+      <a-form-item
+        label="Case Timeout"
+        name="caseTimeout"
+        tooltip="任务超时时间"
+      >
         <a-input-number v-model:value="TheDialog.data.formObj.caseTimeout" />
       </a-form-item>
-      <a-form-item label="Return Time" name="returnTime">
+      <a-form-item label="Return Time" name="returnTime" tooltip="任务结束时间">
         <a-input-number v-model:value="TheDialog.data.formObj.returnTime" />
       </a-form-item>
       <a-form-item label="Max Retry" name="maxRetry" v-if="false">
@@ -31,10 +35,15 @@
           disabled
         />
       </a-form-item>
-      <a-form-item label="Service Options" name="serviceOptions">
+      <a-form-item
+        label="Service Options"
+        name="serviceOptions"
+        tooltip="docker服务选项"
+      >
         <a-textarea
           v-model:value="TheDialog.data.formObj.serviceOptions"
           :auto-size="{ minRows: 3, maxRows: 15 }"
+          placeholder="JSON string"
         />
       </a-form-item>
     </a-form>
@@ -50,8 +59,8 @@ import { message } from "ant-design-vue";
 const formStr = JSON.stringify({
   caseName: "",
   caseToken: "",
-  caseTimeout: 0,
-  returnTime: 0,
+  caseTimeout: 120_000,
+  returnTime: 120_000,
   serviceOptions: "",
 } as Partial<Parameters<typeof addCase>["0"]["data"]>);
 
