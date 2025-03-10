@@ -47,8 +47,8 @@ const pathObj = {
 
 const controller = async (c: NodeHonoContext) => {
     const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
-    const bodyObj = (await c.req.json()) satisfies caseGetReqLike;
-    const { valid, errors } = validate(bodyObj, caseGetReq as object, "2020-12");
+    const paramObj = c.req.query() as caseGetReqLike;
+    const { valid, errors } = validate(paramObj, caseGetReq as object, "2020-12");
     if (!valid) throw new HTTPException(422, { cause: errors });
     const rows = await db
         .select()
@@ -56,8 +56,8 @@ const controller = async (c: NodeHonoContext) => {
         .where(
             and(
                 eq(myCaseTable.id, id),
-                eq(myCaseTable.caseToken, bodyObj.caseToken),
-                bodyObj.caseName ? eq(myCaseTable.caseName, bodyObj.caseName) : undefined,
+                eq(myCaseTable.caseToken, paramObj.caseToken),
+                paramObj.caseName ? eq(myCaseTable.caseName, paramObj.caseName) : undefined,
             ),
         )
         .limit(1);
