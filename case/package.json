@@ -5,7 +5,7 @@
     "type": "module",
     "main": "./src/index.js",
     "scripts": {
-        "build": "npx tsc && npx tsc-alias",
+        "dev": "npx concurrently \"npx tsc --watch\" \"npx tsc-alias --watch\" \"npx nodemon -r dotenv/config ./dist/index.js\"",
         "start:ts": "node ./src/index.ts",
         "start": "node ./dist/index.js"
     },

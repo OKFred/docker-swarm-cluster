@@ -13,20 +13,29 @@ async function runCase() {
     const id = Number(CASE_ID);
     try {
         // 调用 get 接口获取 case 详情
-        const details = await getCase({ path: { id }, query: { caseToken: CASE_TOKEN } });
+        const detailsResponse = await getCase({ path: { id }, params: { caseToken: CASE_TOKEN } });
+        const details = detailsResponse.data;
         console.log("Case details:", details);
-        const { expectedTime, maxRetry, tryCount } = details;
-        if (tryCount >= maxRetry) {
-            console.log("no more tries");
-            return;
+        const { expectedTime, maxRetry, retryCount } = details;
+        if (retryCount && maxRetry && !Number.isNaN(retryCount) && !Number.isNaN(maxRetry)) {
+            if (retryCount >= maxRetry) {
+                console.log("no more tries");
+                return;
+            }
         }
-
+        let caseSucceed;
+        if (details.caseTimeout && details.returnTime) {
+            caseSucceed = details.caseTimeout > details.returnTime;
+        }
         const callbackBody = {
-            caseToken: details.caseToken,
+            caseToken: details.caseToken || CASE_TOKEN,
             // 根据 caseTimeout 与 returnTime 判断 case 成功与否
-            caseSucceed: details.caseTimeout > details.returnTime,
+            caseSucceed: caseSucceed || false,
+            expectedTime: details.expectedTime || new Date().toISOString(),
         };
-        const TimeDifference = new Date().valueOf() - new Date(expectedTime).valueOf();
+        const TimeDifference = expectedTime
+            ? new Date().valueOf() - new Date(expectedTime).valueOf()
+            : 0;
         if (TimeDifference > 0) {
             console.log("case timeout");
         } else {

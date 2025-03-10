@@ -69,8 +69,17 @@ export interface paths {
          */
         get: {
             parameters: {
-                query: {
-                    query: components["schemas"]["caseGetReq"];
+                query?: {
+                    /**
+                     * @description caseToken
+                     * @example example
+                     */
+                    caseToken?: string;
+                    /**
+                     * @description caseName
+                     * @example example
+                     */
+                    caseName?: string;
                 };
                 header?: never;
                 path: {
@@ -284,9 +293,7 @@ export interface paths {
          */
         get: {
             parameters: {
-                query: {
-                    query: components["schemas"]["systemInfoReq"];
-                };
+                query?: never;
                 header?: never;
                 path?: never;
                 cookie?: never;
