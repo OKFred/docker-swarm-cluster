@@ -16,15 +16,16 @@ async function initCase() {
         };
 
         // 调用 server 添加 case 接口
-        const id = await addCase({ data: newCase });
+        const response = await addCase({ data: newCase });
+        const id = response.data;
         console.log("Created case with ID:", id);
 
         // 调用 get 接口获取 case 详情
-        const details = await getCase({ path: { id }, query: { caseToken: CASE_TOKEN } });
-        console.log("Case details:", details);
+        const detailsResponse = await getCase({ path: { id }, params: { caseToken: CASE_TOKEN } });
+        // console.log("Case details:", detailsResponse.data);
 
         // 模拟等待 returnTime
-        await new Promise((resolve) => setTimeout(resolve, details.returnTime));
+        await new Promise((resolve) => setTimeout(resolve, detailsResponse.data.returnTime));
     } catch (err) {
         if (err instanceof Error === false) return;
         console.error("Error running case:", err.message);
@@ -32,7 +33,7 @@ async function initCase() {
     updateTimeout();
 }
 
-let demoTimeout = 1_000;
+let demoTimeout = 10_000;
 function runLoop() {
     initCase().finally(() => setTimeout(runLoop, demoTimeout));
 }
