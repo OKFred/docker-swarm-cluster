@@ -1,7 +1,7 @@
 import type { AppBindings } from "@/types/app.d";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import addCase from "./add";
-import getCase from "./components/get";
+import getCase from "./get";
 import listCase from "./components/list";
 import updateCase from "./components/update";
 import deleteCase from "./components/delete";

@@ -4,10 +4,11 @@ import { myCaseTable } from "../db.model";
 import type { myCaseLike, myCaseAddLike } from "../db.model";
 import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
-import { caseGetReq, caseGetReqLike, caseGetResLike, caseIndex } from "./index";
+import { caseGetReq, caseGetReqLike, caseGetResLike, caseIndex } from "../components/index";
 import schemaToParam from "@/api/schemaToParam";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";
+import getCase from "./service";
 
 // 获取 case 详情接口（用于运行 case）
 
@@ -16,21 +17,9 @@ const controller = async (c: NodeHonoContext) => {
     const paramObj = c.req.query() as caseGetReqLike;
     const { valid, errors } = validate(paramObj, caseGetReq as object, "2020-12");
     if (!valid) throw new HTTPException(422, { cause: errors });
-    const rows = await db
-        .select()
-        .from(myCaseTable)
-        .where(
-            and(
-                eq(myCaseTable.id, id),
-                eq(myCaseTable.caseToken, paramObj.caseToken),
-                paramObj.caseName ? eq(myCaseTable.caseName, paramObj.caseName) : undefined,
-            ),
-        )
-        .limit(1);
-    if (rows.length === 0) {
-        return c.json({ ok: false, message: "Case not found" }, 404);
-    }
-    return c.json({ ok: true, data: rows[0] } satisfies caseGetResLike, 200);
+    const row = await getCase(id, paramObj);
+    if (!row.id) throw new HTTPException(404, { cause: "未找到该 case" });
+    return c.json({ ok: true, data: row } satisfies caseGetResLike, 200);
 };
 
 const pathParameters = schemaToParam(caseIndex, "path");

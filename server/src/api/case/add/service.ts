@@ -11,7 +11,7 @@ process.env.SERVER_URL ??
 process.env.CASE_IMAGE_NAME ??
     (console.error("env CASE_IMAGE_NAME is not set") !== void 0 || process.exit(1));
 
-export const addCase = async (bodyObj: any /* caseAddReqLike */) => {
+const service = async (bodyObj: any /* caseAddReqLike */) => {
     let { caseName, caseToken, caseTimeout, returnTime, serviceOptions } = bodyObj;
     const expectedTime = new Date(new Date().valueOf() + caseTimeout).toISOString();
     const resultAdd = await db
@@ -59,3 +59,5 @@ export const addCase = async (bodyObj: any /* caseAddReqLike */) => {
     await db.update(myCaseTable).set({ serviceId }).where(eq(myCaseTable.id, id));
     return id;
 };
+
+export default service;
