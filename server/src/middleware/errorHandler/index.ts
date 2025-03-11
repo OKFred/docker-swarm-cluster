@@ -32,15 +32,20 @@ export default function errorHandler(app: App) {
     });
 
     app.onError((e, c) => {
-        console.error(e);
         if (e instanceof HTTPException) {
-            return new Response(
-                JSON.stringify({
+            const message =
+                e.status === 404
+                    ? "目标不存在"
+                    : e.status === 422
+                    ? "请求体校验失败"
+                    : "服务器异常";
+            return c.json(
+                {
                     ok: false,
-                    message: "请求体校验失败",
+                    message,
                     errors: e.cause as HTTPExceptionOptions["cause"],
-                }),
-                { status: 422 },
+                },
+                { status: e.status, headers: { "Content-Type": "application/json" } },
             );
         }
         return c.json(
