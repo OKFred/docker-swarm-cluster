@@ -9,39 +9,6 @@ import schemaToParam from "@/api/schemaToParam";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";
 
-const pathParameters = schemaToParam(caseIndex, "path");
-
-const pathObj = {
-    path: "/update/{id}",
-    method: "post",
-    description: "更新 case",
-    summary: "更新 case",
-    tags: ["case"],
-    parameters: [...pathParameters],
-    requestBody: {
-        content: {
-            "application/json": {
-                schema: {
-                    $ref: "#/components/schemas/caseUpdateReq",
-                },
-            },
-        },
-    },
-    responses: {
-        200: {
-            description: "成功",
-            content: {
-                "application/json": {
-                    schema: {
-                        $ref: "#/components/schemas/caseUpdateRes",
-                    },
-                },
-            },
-        },
-        422: errorSchema[422],
-    },
-} satisfies RawRouteConfig;
-
 const controller = async (c: NodeHonoContext) => {
     const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
     const bodyObj = (await c.req.json()) satisfies caseUpdateReqLike;
@@ -75,4 +42,38 @@ const controller = async (c: NodeHonoContext) => {
         }, 20_000); */
     return c.json({ ok: true, data: id } satisfies caseUpdateResLike, 200);
 };
+
+const pathParameters = schemaToParam(caseIndex, "path");
+
+const pathObj = {
+    path: "/update/{id}",
+    method: "post",
+    description: "更新 case",
+    summary: "更新 case",
+    tags: ["case"],
+    parameters: [...pathParameters],
+    requestBody: {
+        content: {
+            "application/json": {
+                schema: {
+                    $ref: "#/components/schemas/caseUpdateReq",
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: "成功",
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/caseUpdateRes",
+                    },
+                },
+            },
+        },
+        422: errorSchema[422],
+    },
+} satisfies RawRouteConfig;
+
 export default { pathObj, controller };

@@ -9,6 +9,17 @@ import schemaToParam from "@/api/schemaToParam";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";
 
+const controller = async (c: NodeHonoContext) => {
+    const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
+    const bodyObj = (await c.req.json()) satisfies caseDeleteReqLike;
+    const { valid, errors } = validate(bodyObj, caseDeleteReq as object, "2020-12");
+    if (!valid) throw new HTTPException(422, { cause: errors });
+    await db
+        .delete(myCaseTable)
+        .where(and(eq(myCaseTable.id, id), eq(myCaseTable.caseToken, bodyObj.caseToken)));
+    return c.json({ ok: true, data: id } satisfies caseDeleteResLike, 200);
+};
+
 const pathParameters = schemaToParam(caseIndex, "path");
 
 const pathObj = {
@@ -41,16 +52,5 @@ const pathObj = {
         422: errorSchema[422],
     },
 } satisfies RawRouteConfig;
-
-const controller = async (c: NodeHonoContext) => {
-    const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
-    const bodyObj = (await c.req.json()) satisfies caseDeleteReqLike;
-    const { valid, errors } = validate(bodyObj, caseDeleteReq as object, "2020-12");
-    if (!valid) throw new HTTPException(422, { cause: errors });
-    await db
-        .delete(myCaseTable)
-        .where(and(eq(myCaseTable.id, id), eq(myCaseTable.caseToken, bodyObj.caseToken)));
-    return c.json({ ok: true, data: id } satisfies caseDeleteResLike, 200);
-};
 
 export default { pathObj, controller };

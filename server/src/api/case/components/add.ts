@@ -16,37 +16,6 @@ process.env.SERVER_URL ??
 process.env.CASE_IMAGE_NAME ??
     (console.error("env CASE_IMAGE_NAME is not set") !== void 0 || process.exit(1));
 
-const pathObj = {
-    path: "/add",
-    method: "post",
-    description: "添加 case",
-    summary: "添加 case",
-    tags: ["case"],
-    parameters: [],
-    requestBody: {
-        content: {
-            "application/json": {
-                schema: {
-                    $ref: "#/components/schemas/caseAddReq",
-                },
-            },
-        },
-    },
-    responses: {
-        200: {
-            description: "成功",
-            content: {
-                "application/json": {
-                    schema: {
-                        $ref: "#/components/schemas/caseAddRes",
-                    },
-                },
-            },
-        },
-        422: errorSchema[422],
-    },
-} satisfies RawRouteConfig;
-
 const controller = async (c: NodeHonoContext) => {
     const bodyObj = await c.req.json(); /*  satisfies caseAddReqLike */ //TODO： TS -> JSON Schema
     const { valid, errors } = validate(bodyObj, caseAddReq as object, "2020-12");
@@ -98,4 +67,36 @@ const controller = async (c: NodeHonoContext) => {
     await db.update(myCaseTable).set({ serviceId }).where(eq(myCaseTable.id, id));
     return c.json({ ok: true, data: id } satisfies caseAddResLike, 200);
 };
+
+const pathObj = {
+    path: "/add",
+    method: "post",
+    description: "添加 case",
+    summary: "添加 case",
+    tags: ["case"],
+    parameters: [],
+    requestBody: {
+        content: {
+            "application/json": {
+                schema: {
+                    $ref: "#/components/schemas/caseAddReq",
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: "成功",
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/caseAddRes",
+                    },
+                },
+            },
+        },
+        422: errorSchema[422],
+    },
+} satisfies RawRouteConfig;
+
 export default { pathObj, controller };

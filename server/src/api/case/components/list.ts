@@ -7,37 +7,6 @@ import { caseListReq, caseListReqLike, caseListResLike } from "./index";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";
 
-const pathObj = {
-    path: "/list",
-    method: "post",
-    description: "查询 case列表",
-    summary: "查询 case列表",
-    tags: ["case"],
-    parameters: [],
-    requestBody: {
-        content: {
-            "application/json": {
-                schema: {
-                    $ref: "#/components/schemas/caseListReq",
-                },
-            },
-        },
-    },
-    responses: {
-        200: {
-            description: "成功",
-            content: {
-                "application/json": {
-                    schema: {
-                        $ref: "#/components/schemas/caseListRes",
-                    },
-                },
-            },
-        },
-        422: errorSchema[422],
-    },
-} satisfies RawRouteConfig;
-
 const controller = async (c: NodeHonoContext) => {
     const bodyObj = (await c.req.json()) satisfies caseListReqLike;
     const { valid, errors } = validate(bodyObj, caseListReq as object, "2020-12");
@@ -73,4 +42,36 @@ const controller = async (c: NodeHonoContext) => {
         200,
     );
 };
+
+const pathObj = {
+    path: "/list",
+    method: "post",
+    description: "查询 case列表",
+    summary: "查询 case列表",
+    tags: ["case"],
+    parameters: [],
+    requestBody: {
+        content: {
+            "application/json": {
+                schema: {
+                    $ref: "#/components/schemas/caseListReq",
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: "成功",
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/caseListRes",
+                    },
+                },
+            },
+        },
+        422: errorSchema[422],
+    },
+} satisfies RawRouteConfig;
+
 export default { pathObj, controller };
