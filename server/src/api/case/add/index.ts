@@ -3,7 +3,7 @@ import { validate } from "@cfworker/json-schema";
 import { caseAddReq, caseAddReqLike, caseAddResLike } from "../components/index";
 import { HTTPException } from "hono/http-exception";
 import { errorSchema } from "@/middleware/errorHandler/schema";
-import { addCase } from "./service";
+import { addCase } from "./add.service";
 
 const controller = async (c: NodeHonoContext) => {
     const bodyObj = await c.req.json(); /*  satisfies caseAddReqLike */ //TODO： TS -> JSON Schema
