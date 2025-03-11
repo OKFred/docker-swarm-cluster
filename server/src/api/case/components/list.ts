@@ -1,6 +1,6 @@
 import { and, eq, asc, desc } from "drizzle-orm";
 import { db } from "@/db/index";
-import { myCaseTable } from "@/db/schema";
+import { myCaseTable } from "../db.model";
 import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
 import { caseListReq, caseListReqLike, caseListResLike } from "./index";

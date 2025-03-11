@@ -7,8 +7,10 @@ import updateCase from "./components/update";
 import deleteCase from "./components/delete";
 import registerPath from "@/api/register";
 import { componentArr } from "./components/index";
+import tableInit from "./db.table";
 
 function createApp() {
+    tableInit();
     const app = new OpenAPIHono<AppBindings>();
     componentArr.forEach((component) => {
         app.openAPIRegistry.registerComponent(
