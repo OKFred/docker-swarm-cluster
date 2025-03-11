@@ -10,16 +10,7 @@ import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";
 
 const pathParameters = schemaToParam(caseIndex, "path");
-const queryParameters = schemaToParam(
-    {
-        type: "object",
-        properties: {
-            caseToken: { type: "string", description: "caseToken", examples: ["example"] },
-            caseName: { type: "string", description: "caseName", examples: ["example"] },
-        },
-    },
-    "query",
-);
+const queryParameters = schemaToParam({ $ref: "#/components/schemas/caseGetReq" }, "query");
 
 const pathObj = {
     path: "/get/{id}",
