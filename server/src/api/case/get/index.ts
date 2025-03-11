@@ -4,7 +4,7 @@ import { myCaseTable } from "../db.model";
 import type { myCaseLike, myCaseAddLike } from "../db.model";
 import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
-import { caseGetReq, caseGetReqLike, caseGetResLike, caseIndex } from "../components/index";
+import { caseGetReq, caseGetReqLike, caseGetResLike, caseIndex } from "../api.schema";
 import schemaToParam from "@/api/schemaToParam";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";

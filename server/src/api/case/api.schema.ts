@@ -1,12 +1,12 @@
 import type { FromSchema, JSONSchema } from "json-schema-to-ts";
-import type { myCaseLike } from "../db.model";
+import type { myCaseLike } from "./db.model";
 import {
     myCase,
     myCaseAddable,
     myCaseReadable,
     myCaseUpdatable,
     myCaseDeletable,
-} from "../db.schema";
+} from "./db.schema";
 import Dockerode from "dockerode";
 
 export const caseIndex = {

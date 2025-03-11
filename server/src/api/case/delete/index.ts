@@ -6,7 +6,7 @@ import {
     caseDeleteReq,
     caseDeleteReqLike,
     caseDeleteResLike,
-} from "../components/index";
+} from "../api.schema";
 import schemaToParam from "@/api/schemaToParam";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";

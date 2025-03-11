@@ -1,7 +1,7 @@
 import { and, eq, asc, desc } from "drizzle-orm";
 import { db } from "@/db/index";
 import { myCaseTable } from "../db.model";
-import { caseListReqLike } from "../components/index";
+import { caseListReqLike } from "../api.schema";
 
 const service = async (bodyObj: caseListReqLike) => {
     const { orderBy = "id", descend = true, pageNo = 1, pageSize = 10, keyword = "" } = bodyObj;

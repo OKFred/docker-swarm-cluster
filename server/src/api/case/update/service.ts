@@ -2,7 +2,7 @@ import { and, eq, asc, desc } from "drizzle-orm";
 import { db } from "@/db/index";
 import { myCaseTable } from "../db.model";
 import type { myCaseLike } from "../db.model";
-import { caseUpdateReqLike } from "../components";
+import { caseUpdateReqLike } from "../api.schema";
 
 const service = async (id: myCaseLike["id"], bodyObj: caseUpdateReqLike) => {
     const { expectedTime, caseToken, caseSucceed } = bodyObj;

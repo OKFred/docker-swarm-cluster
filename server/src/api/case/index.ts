@@ -6,7 +6,7 @@ import getCase from "./get";
 import listCase from "./list";
 import updateCase from "./update";
 import deleteCase from "./delete";
-import { componentArr } from "./components/index";
+import { componentArr } from "./api.schema";
 import tableInit from "./db.table";
 
 function createApp() {

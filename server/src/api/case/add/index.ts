@@ -1,6 +1,6 @@
 import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
-import { caseAddReq, caseAddReqLike, caseAddResLike } from "../components/index";
+import { caseAddReq, caseAddReqLike, caseAddResLike } from "../api.schema";
 import { HTTPException } from "hono/http-exception";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 import addCase from "./service";
