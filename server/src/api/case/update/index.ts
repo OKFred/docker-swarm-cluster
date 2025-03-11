@@ -4,36 +4,41 @@ import { myCaseTable } from "../db.model";
 import type { myCaseLike } from "../db.model";
 import { NodeHonoContext, RawRouteConfig } from "@/types/app";
 import { validate } from "@cfworker/json-schema";
-import { caseIndex, caseDeleteReq, caseDeleteReqLike, caseDeleteResLike } from "./index";
+import {
+    caseIndex,
+    caseUpdateReq,
+    caseUpdateReqLike,
+    caseUpdateResLike,
+} from "../components/index";
 import schemaToParam from "@/api/schemaToParam";
 import { errorSchema } from "@/middleware/errorHandler/schema";
 import { HTTPException } from "hono/http-exception";
+import updateService from "./service";
 
 const controller = async (c: NodeHonoContext) => {
     const id = Number(c.req.param("id")) satisfies myCaseLike["id"];
-    const bodyObj = (await c.req.json()) satisfies caseDeleteReqLike;
-    const { valid, errors } = validate(bodyObj, caseDeleteReq as object, "2020-12");
+    const bodyObj = (await c.req.json()) satisfies caseUpdateReqLike;
+    const { valid, errors } = validate(bodyObj, caseUpdateReq as object, "2020-12");
     if (!valid) throw new HTTPException(422, { cause: errors });
-    await db
-        .delete(myCaseTable)
-        .where(and(eq(myCaseTable.id, id), eq(myCaseTable.caseToken, bodyObj.caseToken)));
-    return c.json({ ok: true, data: id } satisfies caseDeleteResLike, 200);
+    const updateResult = await updateService(id, bodyObj);
+    if (!updateResult) throw new HTTPException(404, { cause: "Case not found or not updated" });
+    return c.json({ ok: true, data: id } satisfies caseUpdateResLike, 200);
 };
 
 const pathParameters = schemaToParam(caseIndex, "path");
 
 const pathObj = {
-    path: "/delete/{id}",
-    method: "delete",
-    description: "删除 case",
-    summary: "删除 case",
+    path: "/update/{id}",
+    method: "post",
+    description: "更新 case",
+    summary: "更新 case",
     tags: ["case"],
     parameters: [...pathParameters],
     requestBody: {
         content: {
             "application/json": {
                 schema: {
-                    $ref: "#/components/schemas/caseDeleteReq",
+                    $ref: "#/components/schemas/caseUpdateReq",
                 },
             },
         },
@@ -44,7 +49,7 @@ const pathObj = {
             content: {
                 "application/json": {
                     schema: {
-                        $ref: "#/components/schemas/caseAddRes",
+                        $ref: "#/components/schemas/caseUpdateRes",
                     },
                 },
             },

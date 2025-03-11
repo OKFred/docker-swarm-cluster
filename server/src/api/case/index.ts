@@ -1,11 +1,11 @@
 import type { AppBindings } from "@/types/app.d";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import registerPath from "@/api/register";
 import addCase from "./add";
 import getCase from "./get";
-import listCase from "./components/list";
-import updateCase from "./components/update";
-import deleteCase from "./components/delete";
-import registerPath from "@/api/register";
+import listCase from "./list";
+import updateCase from "./update";
+import deleteCase from "./delete";
 import { componentArr } from "./components/index";
 import tableInit from "./db.table";
 
