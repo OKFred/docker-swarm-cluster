@@ -1,5 +1,4 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import type { PinoLogger } from "hono-pino";
 import type { Context } from "hono";
 import type { RouteConfig } from "@hono/zod-openapi";
 import { ParameterObject, RequestBodyObject } from "openapi3-ts/oas31";
@@ -21,9 +20,7 @@ export type routeLike = {
 };
 
 export type AppBindings = {
-    Variables: {
-        logger: PinoLogger;
-    };
+    Variables: {};
     Bindings: Env;
 };
 
