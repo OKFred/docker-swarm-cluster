@@ -8,7 +8,7 @@
         @click="props.localObj.TheDialog?.fn.onOpen()"
       >
         <Icon name="fas:plus" />
-        <span class="the-button-text">Add</span>
+        <span class="the-button-text">新增</span>
       </a-button>
     </div>
     <div class="my-default-padding">
@@ -17,10 +17,9 @@
         size="large"
         class="the-button"
         @click="props.localObj.TheTable?.fn.loadData()"
-        ><!-- 
-        Query -->
+        >
         <Icon name="fas:search" />
-        <span class="the-button-text">Query</span>
+        <span class="the-button-text">查询</span>
       </a-button>
     </div>
   </div>

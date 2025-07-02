@@ -9,7 +9,7 @@
       total: TheTable.data.total,
       showSizeChanger: true,
       showQuickJumper: true,
-      showTotal: (total) => `Total ${total} items`,
+      showTotal: (total) => `共 ${total} 条`,
       onChange: (pageNo, pageSize) => {
         TheTable.data.pageNo = pageNo;
         TheTable.data.pageSize = pageSize;
@@ -46,17 +46,17 @@ const TheTable = reactive({
         key: "id",
       },
       {
-        title: "Case Name",
+        title: "任务名称",
         dataIndex: "caseName",
         key: "caseName",
       },
       {
-        title: "Case Token",
+        title: "Token",
         dataIndex: "caseToken",
         key: "caseToken",
       },
       {
-        title: "Case Timeout",
+        title: "超时时间",
         dataIndex: "caseTimeout",
         key: "caseTimeout",
         //time in ms
@@ -65,7 +65,7 @@ const TheTable = reactive({
         },
       },
       {
-        title: "Return Time",
+        title: "返回时间",
         dataIndex: "returnTime",
         key: "returnTime",
         customRender: (obj: { value: number }) => {
@@ -73,25 +73,25 @@ const TheTable = reactive({
         },
       },
       {
-        title: "Case Succeed",
+        title: "用例成功",
         dataIndex: "caseSucceed",
         key: "caseSucceed",
         //boolean
         customRender: (obj: { value: any }) => {
-          return obj.value ? "Yes" : "No";
+          return obj.value ? "是" : "否";
         },
       },
       {
-        title: "Case Finished",
+        title: "用例完成",
         dataIndex: "caseFinished",
         key: "caseFinished",
         //boolean
         customRender: (obj: { value: any }) => {
-          return obj.value ? "Yes" : "No";
+          return obj.value ? "是" : "否";
         },
       },
       {
-        title: "Create Time",
+        title: "创建时间",
         dataIndex: "createTime",
         key: "createTime",
         //time UTC
@@ -104,7 +104,7 @@ const TheTable = reactive({
         },
       },
       {
-        title: "Update Time",
+        title: "更新时间",
         dataIndex: "updateTime",
         key: "updateTime",
         customRender: (obj: {
@@ -116,7 +116,7 @@ const TheTable = reactive({
         },
       },
       {
-        title: "Expected Time",
+        title: "预计时间",
         dataIndex: "expectedTime",
         key: "expectedTime",
         customRender: (obj: {
@@ -133,12 +133,12 @@ const TheTable = reactive({
         key: "serviceId",
       },
       {
-        title: "Retry Count",
+        title: "重试次数",
         dataIndex: "retryCount",
         key: "retryCount",
       },
       {
-        title: "Max Retry",
+        title: "最大重试次数",
         dataIndex: "maxRetry",
         key: "maxRetry",
       },
