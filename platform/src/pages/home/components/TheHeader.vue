@@ -5,28 +5,28 @@
     </a-row>
     <br />
     <a-row>
-      <a-col :span="6">Node: {{ TheHeader.data.systemInfo?.node }}</a-col>
+      <a-col :span="6">节点: {{ TheHeader.data.systemInfo?.node }}</a-col>
       <a-col :span="6"
-        >Platform: {{ TheHeader.data.systemInfo?.platform }}</a-col
+        >平台: {{ TheHeader.data.systemInfo?.platform }}</a-col
       >
-      <a-col :span="6">Arch: {{ TheHeader.data.systemInfo?.arch }}</a-col>
-      <a-col :span="6">Cpus: {{ TheHeader.data.systemInfo?.cpus }}</a-col>
+      <a-col :span="6">架构: {{ TheHeader.data.systemInfo?.arch }}</a-col>
+      <a-col :span="6">CPU: {{ TheHeader.data.systemInfo?.cpus }}</a-col>
     </a-row>
     <a-row>
-      <a-col :span="6">Memory: {{ TheHeader.data.systemInfo?.memory }}</a-col>
-      <a-col :span="6">Uptime: {{ TheHeader.data.systemInfo?.uptime }}</a-col>
-      <a-col :span="6">Loadavg: {{ TheHeader.data.systemInfo?.loadavg }}</a-col>
+      <a-col :span="6">内存: {{ TheHeader.data.systemInfo?.memory }}</a-col>
+      <a-col :span="6">运行时间: {{ TheHeader.data.systemInfo?.uptime }}</a-col>
+      <a-col :span="6">负载均衡: {{ TheHeader.data.systemInfo?.loadavg }}</a-col>
       <a-col :span="6"
-        >Totalmem: {{ TheHeader.data.systemInfo?.totalmem }}</a-col
+        >总内存: {{ TheHeader.data.systemInfo?.totalmem }}</a-col
       >
     </a-row>
     <a-row>
-      <a-col :span="6">Freemem: {{ TheHeader.data.systemInfo?.freemem }}</a-col>
+      <a-col :span="6">空闲内存: {{ TheHeader.data.systemInfo?.freemem }}</a-col>
       <a-col :span="6"
-        >Hostname: {{ TheHeader.data.systemInfo?.hostname }}</a-col
+        >主机名: {{ TheHeader.data.systemInfo?.hostname }}</a-col
       >
-      <a-col :span="6">Type: {{ TheHeader.data.systemInfo?.type }}</a-col>
-      <a-col :span="6">Release: {{ TheHeader.data.systemInfo?.release }}</a-col>
+      <a-col :span="6">类型: {{ TheHeader.data.systemInfo?.type }}</a-col>
+      <a-col :span="6">版本: {{ TheHeader.data.systemInfo?.release }}</a-col>
     </a-row>
   </a-card>
 </template>
