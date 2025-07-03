@@ -5,7 +5,7 @@ services:
     #  - "5000:3000"
     environment:
       - PORT=3000 #端口配套 ../platform/docker_nginx.conf，对/api转发
-      - SERVER_URL=http://10.121.118.11:3000
+      - SERVER_URL=http://10.121.118.111:3000
       - DB_FILE_NAME=file:local.db
       - FEISHU_WEBHOOK=https://open.feishu.cn/open-apis/bot/v2/hook/60adf83f-2ccb-4ebb-a152-a0eeedd604f5
       - CASE_IMAGE_NAME=registry.cn-hangzhou.aliyuncs.com/one-registry/docker-swarm-case
@@ -24,7 +24,7 @@ services:
     ports:
       - "3000:80"
     environment:
-      - SERVER_URL=http://10.121.118.11:3000
+      - SERVER_URL=http://10.121.118.111:3000
     deploy:
       placement:
         constraints:
@@ -36,7 +36,7 @@ services:
     depends_on:
       - server
     environment:
-      - SERVER_URL=http://10.121.118.11:3000
+      - SERVER_URL=http://10.121.118.111:3000
     deploy:
       placement:
         constraints:
