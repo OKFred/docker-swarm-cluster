@@ -1,7 +1,7 @@
 <template>
   <a-card>
     <a-row>
-      <a-col :span="24">Current time: {{ localObj.data.currentTime }}</a-col>
+      <a-col :span="24">当前时间: {{ localObj.data.currentTime }}</a-col>
     </a-row>
     <br />
     <a-row>

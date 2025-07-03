@@ -51,7 +51,7 @@ const TheTable = reactive({
         key: "caseName",
       },
       {
-        title: "Token",
+        title: "任务令牌",
         dataIndex: "caseToken",
         key: "caseToken",
       },
@@ -73,7 +73,7 @@ const TheTable = reactive({
         },
       },
       {
-        title: "用例成功",
+        title: "是否成功",
         dataIndex: "caseSucceed",
         key: "caseSucceed",
         //boolean
@@ -82,7 +82,7 @@ const TheTable = reactive({
         },
       },
       {
-        title: "用例完成",
+        title: "是否结束",
         dataIndex: "caseFinished",
         key: "caseFinished",
         //boolean

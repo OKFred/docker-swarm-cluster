@@ -7,36 +7,36 @@
     width="60%"
   >
     <a-form :form="TheDialog.data.formObj">
-      <a-form-item label="Case Name" name="caseName" tooltip="任务名称">
+      <a-form-item label="任务名称" name="caseName" tooltip="任务名称">
         <a-input
           v-model:value="TheDialog.data.formObj.caseName"
           class="case-name"
         />
       </a-form-item>
-      <a-form-item label="Case Token" name="caseToken" tooltip="任务令牌">
+      <a-form-item label="任务令牌" name="caseToken" tooltip="任务令牌">
         <a-input
           v-model:value="TheDialog.data.formObj.caseToken"
           class="case-token"
         />
       </a-form-item>
       <a-form-item
-        label="Case Timeout"
+        label="任务超时时间"
         name="caseTimeout"
         tooltip="任务超时时间"
       >
         <a-input-number v-model:value="TheDialog.data.formObj.caseTimeout" />
       </a-form-item>
-      <a-form-item label="Return Time" name="returnTime" tooltip="任务结束时间">
+      <a-form-item label="返回时间" name="returnTime" tooltip="任务结束时间">
         <a-input-number v-model:value="TheDialog.data.formObj.returnTime" />
       </a-form-item>
-      <a-form-item label="Max Retry" name="maxRetry" v-if="false">
+      <a-form-item label="最大重试次数" name="maxRetry" v-if="false">
         <a-input-number
           v-model:value="TheDialog.data.formObj.maxRetry"
           disabled
         />
       </a-form-item>
       <a-form-item
-        label="Service Options"
+        label="服务选项"
         name="serviceOptions"
         tooltip="docker服务选项"
       >
@@ -49,7 +49,7 @@
         
         <!-- 普通模式 -->
         <div v-if="TheDialog.data.serviceMode === 'normal'">
-          <a-form-item label="Image" name="image" required>
+          <a-form-item label="容器镜像名称" name="image" required>
             <a-input v-model:value="TheDialog.data.normalConfig.image" placeholder="容器镜像名称" />
           </a-form-item>
           
@@ -73,9 +73,9 @@
           
           <a-form-item label="重启策略" name="restartCondition">
             <a-select v-model:value="TheDialog.data.normalConfig.restartCondition" style="width: 200px;">
-              <a-select-option value="none">none</a-select-option>
-              <a-select-option value="on-failure">on-failure</a-select-option>
-              <a-select-option value="any">any</a-select-option>
+              <a-select-option value="none">无</a-select-option>
+              <a-select-option value="on-failure">失败时重启</a-select-option>
+              <a-select-option value="any">任何情况都重启</a-select-option>
             </a-select>
           </a-form-item>
           
@@ -103,7 +103,7 @@
           v-else
           v-model:value="TheDialog.data.formObj.serviceOptions"
           :auto-size="{ minRows: 3, maxRows: 15 }"
-          placeholder="JSON string"
+          placeholder="JSON格式的服务选项，例如：{&quot;Name&quot;: &quot;case-service&quot;, &quot;TaskTemplate&quot;: {&quot;ContainerSpec&quot;: {&quot;Image&quot;: &quot;your-image&quot;, &quot;Env&quot;: [&quot;KEY=VALUE&quot;]}}}"
         />
       </a-form-item>
     </a-form>
