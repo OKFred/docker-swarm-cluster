@@ -81,7 +81,6 @@ function interceptors(service: AxiosInstance) {
                     _url = _url.replace(`{${key}}`, String(value));
                 }
                 config.url = _url;
-                console.log({ config });
             }
             return config;
         },
