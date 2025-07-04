@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
 import { getCaseList } from "@/api/case";
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, h } from "vue";
 import dayjs from "dayjs";
 import type { localObjLike } from "../index.vue";
 
@@ -78,7 +78,7 @@ const TheTable = reactive({
         key: "caseSucceed",
         //boolean
         customRender: (obj: { value: any }) => {
-          return obj.value ? "是" : "否";
+          return h('a-tag', { color: obj.value ? 'green' : 'red' }, obj.value ? '是' : '否');
         },
       },
       {
@@ -87,7 +87,7 @@ const TheTable = reactive({
         key: "caseFinished",
         //boolean
         customRender: (obj: { value: any }) => {
-          return obj.value ? "是" : "否";
+          return h('a-tag', { color: obj.value ? 'blue' : 'orange' }, obj.value ? '是' : '否');
         },
       },
       {
