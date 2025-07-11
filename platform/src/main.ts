@@ -18,7 +18,7 @@ async function main() {
 
   //初始化语言
   const localeStore = useLocaleStore();
-  localeStore.initLang();
+  await localeStore.initLang();
 
   app.mount("#app");
 }
