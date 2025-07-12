@@ -23,10 +23,10 @@ export const myCase = {
     caseFinished: {
         type: "boolean",
     },
-    createTime: {
+    createTimeUtc: {
         type: "string",
     },
-    updateTime: {
+    updateTimeUtc: {
         type: "string",
         nullable: true,
     },

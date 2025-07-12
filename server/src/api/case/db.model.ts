@@ -10,10 +10,10 @@ export const myCaseTable = sqliteTable("my_case", {
     returnTime: integer("return_time").notNull(),
     caseSucceed: integer("case_succeed", { mode: "boolean" }).notNull().default(false),
     caseFinished: integer("case_finished", { mode: "boolean" }).notNull().default(false),
-    createTime: text("create_time")
+    createTimeUtc: text("create_time")
         .notNull()
         .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
-    updateTime: text("update_time"),
+    updateTimeUtc: text("update_time"),
     expectedTime: text("expected_time"),
     serviceId: text("service_id"),
     retryCount: integer("retry_count"),

@@ -6,7 +6,7 @@ import { caseUpdateReqLike } from "../api.schema";
 
 const service = async (id: myCaseLike["id"], bodyObj: caseUpdateReqLike) => {
     const { expectedTime, caseToken, caseSucceed } = bodyObj;
-    const updateTime = new Date().toISOString();
+    const updateTimeUtc = new Date().toISOString();
     const rows = await db.select().from(myCaseTable).where(eq(myCaseTable.id, id)).limit(1);
     if (rows.length === 0) return false;
     const { serviceId, maxRetry, retryCount } = rows[0];
@@ -22,7 +22,7 @@ const service = async (id: myCaseLike["id"], bodyObj: caseUpdateReqLike) => {
     }
     const res = await db
         .update(myCaseTable)
-        .set({ caseSucceed, caseFinished: true, updateTime, retryCount: newRetryCount })
+        .set({ caseSucceed, caseFinished: true, updateTimeUtc, retryCount: newRetryCount })
         .where(and(eq(myCaseTable.id, id), eq(myCaseTable.caseToken, caseToken)));
     if (res.rowsAffected === 0) return false;
     /* setTimeout(async () => {
