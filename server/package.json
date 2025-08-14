@@ -4,8 +4,8 @@
     "description": "Server application for handling cases",
     "type": "module",
     "scripts": {
-        "dev": "npx concurrently \"npx tsc --watch\" \"npx tsc-alias --watch\" \"npx nodemon --inspect=0.0.0.0:9229 -r dotenv/config ./dist/index.js\"",
-        "build": "npx tsc && npx tsc-alias",
+        "dev": "npx concurrently \"npx tsgo --watch\" \"npx tsc-alias --watch\" \"npx nodemon --inspect=0.0.0.0:9229 -r dotenv/config ./dist/index.js\"",
+        "build": "npx tsgo && npx tsc-alias",
         "start:ts": "node ./src/index.ts",
         "start": "node ./dist/index.js"
     },
@@ -17,10 +17,12 @@
         "dockerode": "^4.0.4",
         "dotenv": "^16.4.7",
         "drizzle-orm": "^0.39.3",
-        "hono": "^4.7.2"
+        "hono": "^4.7.2",
+        "http-status-codes": "^2.3.0"
     },
     "devDependencies": {
         "@types/dockerode": "^3.3.34",
+        "@typescript/native-preview": "7.0.0-dev.20250712.1",
         "json-schema-to-ts": "^3.1.1",
         "openapi3-ts": "^4.4.0",
         "tsc-alias": "^1.8.11",

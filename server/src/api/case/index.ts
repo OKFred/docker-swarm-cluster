@@ -7,7 +7,8 @@ import listCase from "./list";
 import updateCase from "./update";
 import deleteCase from "./delete";
 import { componentArr } from "./api.schema";
-import tableInit from "./db.table";
+import {tableInit} from "./db.table";
+import pathRegister from "../pathRegister";
 
 function createApp() {
     tableInit();
@@ -20,8 +21,17 @@ function createApp() {
         );
     });
     const arr = [addCase, getCase, listCase, updateCase, deleteCase];
-    arr.forEach(({ pathObj, controller }) => {
-        registerPath(app, pathObj, controller);
+    arr.forEach(({ pathObj, controller, componentArr }) => {
+        pathRegister(app, pathObj, controller);
+        if (componentArr) {
+            componentArr.forEach((component) => {
+                app.openAPIRegistry.registerComponent(
+                    "schemas",
+                    component.name,
+                    component.component,
+                );
+            });
+        }
     });
     return app;
 }
