@@ -22,11 +22,11 @@
       <a-form-item
         label="任务超时时间"
         name="caseTimeout"
-        tooltip="任务超时时间"
+        tooltip="任务超时时间(毫秒)"
       >
         <a-input-number v-model:value="TheDialog.data.formObj.caseTimeout" />
       </a-form-item>
-      <a-form-item label="返回时间" name="returnTime" tooltip="任务结束时间">
+      <a-form-item label="返回时间" name="returnTime" tooltip="任务结束时间(毫秒)">
         <a-input-number v-model:value="TheDialog.data.formObj.returnTime" />
       </a-form-item>
       <a-form-item label="最大重试次数" name="maxRetry" v-if="false">
@@ -192,7 +192,7 @@ function onSubmit() {
   if (TheDialog.data.serviceMode === "normal") {
     // 普通模式验证
     const config = TheDialog.data.normalConfig;
-    if (!config.image.trim()) {
+/*     if (!config.image.trim()) {
       message.error("Image 字段是必填的");
       return;
     }
@@ -203,7 +203,7 @@ function onSubmit() {
     if (!config.replicas || config.replicas <= 0) {
       message.error("副本数量必须大于 0");
       return;
-    }
+    } */ //不好使，先注释
 
     // 构建环境变量数组
     const envArray = config.env
